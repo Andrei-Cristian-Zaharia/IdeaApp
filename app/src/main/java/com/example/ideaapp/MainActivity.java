@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(App.Result<User> result) {
                 if (result.isSuccess()) {
                     Log.v("QUICKSTART", "Successfully authenticated anonymously.");
-
+            //dsadsa
                     User user = app.currentUser();
                     mongoClient = user.getMongoClient("mongodb-atlas");
                     mongoDatabase = mongoClient.getDatabase("IdeaAppDB");
