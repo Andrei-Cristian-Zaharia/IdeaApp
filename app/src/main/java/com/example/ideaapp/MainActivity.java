@@ -4,13 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.annotation.SuppressLint;
+
+import Features.Database;
+import Features.Idea_Adapter;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -25,14 +32,19 @@ public class MainActivity extends AppCompatActivity  {
     private String text;
 
 
+    ListView listView;
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         LoadData();
         if(text.isEmpty()){
+            setContentView(R.layout.activity_main);
             username = (EditText) findViewById(R.id.username) ;
             button = (Button)   findViewById(R.id.button);
-            setContentView(R.layout.activity_main);
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -64,7 +76,8 @@ public class MainActivity extends AppCompatActivity  {
          username.setText(text);
 
         Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
-
+        
+        setContentView(R.layout.main_display);
      }
 
      void LoadData () {
@@ -73,7 +86,7 @@ public class MainActivity extends AppCompatActivity  {
      }
 
      public void openActivity() {
-        Intent intent = new Intent(this , Activitate_test.class);
+        Intent intent = new Intent(this , Main_display_activity.class);
         startActivity(intent);
      }
 

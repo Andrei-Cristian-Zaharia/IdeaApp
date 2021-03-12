@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ideaapp.MainActivity;
+import com.example.ideaapp.Main_display_activity;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,10 +26,10 @@ public class Database {
 
     String AppId = "ideaapp-mautk";
     Realm uiThreadRealm;
-    MainActivity activity;
+    Main_display_activity activity;
     App app;
 
-    public Database(Context context, MainActivity activityObj) {
+    public Database(Context context, Main_display_activity activityObj) {
         activity = activityObj;
         Realm.init(context);
         app = new App(new AppConfiguration.Builder(AppId).build());
