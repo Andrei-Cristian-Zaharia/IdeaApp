@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -39,9 +41,10 @@ public class MainActivity extends AppCompatActivity  {
 
         LoadData();
         if(text.isEmpty()){
+            setContentView(R.layout.activity_main);
             username = (EditText) findViewById(R.id.username) ;
             button = (Button)   findViewById(R.id.button);
-            setContentView(R.layout.activity_main);
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -77,29 +80,13 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.main_display);
      }
 
-     public void DisplayData(String[] names, String[] descriptions){
-
-         ListView listView = (ListView) findViewById(R.id.listview);
-
-
-         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
-         listView.setAdapter(adapter);
-
-         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-             @Override
-             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                 Toast.makeText(MainActivity.this, names[position], Toast.LENGTH_SHORT).show();
-             }
-         });
-     }
-
      void LoadData () {
          SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
          text = sharedPreferences.getString(TEXT, "");
      }
 
      public void openActivity() {
-        Intent intent = new Intent(this , Activitate_test.class);
+        Intent intent = new Intent(this , Main_display_activity.class);
         startActivity(intent);
      }
 
