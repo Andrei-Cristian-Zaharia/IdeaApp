@@ -3,6 +3,11 @@ package com.example.ideaapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import Features.Database;
 import Features.Idea_Adapter;
