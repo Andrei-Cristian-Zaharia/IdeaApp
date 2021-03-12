@@ -1,67 +1,38 @@
 package com.example.ideaapp;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
+import android.annotation.SuppressLint;
 
-import Models.UserModel;
-import io.realm.Realm;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.mongo.MongoClient;
-import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.MongoDatabase;
+import Features.Database;
+import Features.Idea_Adapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    String AppId = "ideaapp-mautk";
-    private App app;
-    MongoClient mongoClient;
-    MongoDatabase mongoDatabase;
+    ListView listView;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_display);
 
-        Realm.init(this);
-        app = new App(new AppConfiguration.Builder(AppId).build());
+        Database db = new Database(this, this);
+     }
 
-        Credentials credentials = Credentials.anonymous();
-        app.loginAsync(credentials, new App.Callback<User>() {
-            @Override
-            public void onResult(App.Result<User> result) {
-                if (result.isSuccess()) {
-                    Log.v("QUICKSTART", "Successfully authenticated anonymously.");
-            //dsadsa
-                    User user = app.currentUser();
-                    mongoClient = user.getMongoClient("mongodb-atlas");
-                    mongoDatabase = mongoClient.getDatabase("IdeaAppDB");
-                    MongoCollection mongoCollection = mongoDatabase.getCollection("UserModel");
-                   // RealmResultTask<Document> x = mongoCollection.findOne();
-                    //x.getAsync(result1 -> { Log.v("MESSAGE", result1.get().toString()); });
+     public void DisplayData(String[] names, String[] descriptions){
 
-                    UserModel userModel = new UserModel();
-                    userModel.set_id(new ObjectId());
-                    userModel.setUserid(user.getId());
+         ListView listView = (ListView) findViewById(R.id.listview);
 
-                    mongoCollection.insertOne(new Document("userid", user.getId())).getAsync(result1 -> {
-                        if (result.isSuccess()) {
-                            Log.v("UPLOAD DATA", "Data was succsesfuly uploaded !");
-                        } else {
-                            Log.e("UPLOAD DATA", result.getError().toString());
-                        }
-                    });
-                } else {
-                    Log.e("QUICKSTART", "Failed to log in. Error: " + result.getError());
-                }
-            }
-        });
-    }
+
+         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
+         listView.setAdapter(adapter);
+
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 Toast.makeText(MainActivity.this, names[position], Toast.LENGTH_SHORT).show();
+             }
+         });
+     }
 }
