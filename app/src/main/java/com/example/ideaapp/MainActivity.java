@@ -1,50 +1,56 @@
 package com.example.ideaapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity  {
 
     EditText username;
     Button button;
     String usernamee ;
-
-   /* public static final String SHARED_PREFS = " sharedPrefs";
+    Switch test;
+    public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
 
-    */
 
-   // private String text;
+    private String text;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+        LoadData();
+        if(text.isEmpty()){
+            username = (EditText) findViewById(R.id.username) ;
+            button = (Button)   findViewById(R.id.button);
+            setContentView(R.layout.activity_main);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SaveData();
 
-      /*  username = (EditText) findViewById(R.id.username) ;
-        button = (Button)   findViewById(R.id.button);
+                    openActivity();
 
-
-
-
-     button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SaveData();
-            }
-        });
-
-       */
-
-
+                }
+            });
+        }
+        else
+        {
+            openActivity();
+        }
 
      }
 
-    /* void SaveData ()  {
+  void SaveData ()  {
         usernamee =  username.getText().toString();
          SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS , MODE_PRIVATE);
          SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -61,5 +67,14 @@ public class MainActivity extends AppCompatActivity {
 
      }
 
-     */
+     void LoadData () {
+         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+         text = sharedPreferences.getString(TEXT, "");
+     }
+
+     public void openActivity() {
+        Intent intent = new Intent(this , Activitate_test.class);
+        startActivity(intent);
+     }
+
 }
