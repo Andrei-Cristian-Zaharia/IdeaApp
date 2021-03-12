@@ -1,43 +1,65 @@
 package com.example.ideaapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 
-import Features.Database;
-import Features.Idea_Adapter;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
+    EditText username;
+    Button button;
+    String usernamee ;
 
-    @SuppressLint("WrongViewCast")
+   /* public static final String SHARED_PREFS = " sharedPrefs";
+    public static final String TEXT = "text ";
+
+    */
+
+   // private String text;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_display);
+        setContentView(R.layout.login_layout);
 
-        Database db = new Database(this, this);
+      /*  username = (EditText) findViewById(R.id.username) ;
+        button = (Button)   findViewById(R.id.button);
+
+
+
+
+     button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SaveData();
+            }
+        });
+
+       */
+
+
+
      }
 
-     public void DisplayData(String[] names, String[] descriptions){
+    /* void SaveData ()  {
+        usernamee =  username.getText().toString();
+         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS , MODE_PRIVATE);
+         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-         ListView listView = (ListView) findViewById(R.id.listview);
+         editor.putString(TEXT,username.getText().toString());
+
+         text = sharedPreferences.getString(TEXT , " ");
+         editor.apply();
 
 
-         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
-         listView.setAdapter(adapter);
+         username.setText(text);
 
-         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-             @Override
-             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                 Toast.makeText(MainActivity.this, names[position], Toast.LENGTH_SHORT).show();
-             }
-         });
+        Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
+
      }
+
+     */
 }
