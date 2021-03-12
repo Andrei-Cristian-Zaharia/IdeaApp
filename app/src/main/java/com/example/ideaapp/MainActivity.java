@@ -12,6 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.annotation.SuppressLint;
+
+import Features.Database;
+import Features.Idea_Adapter;
+
 public class MainActivity extends AppCompatActivity  {
 
     EditText username;
@@ -25,9 +30,13 @@ public class MainActivity extends AppCompatActivity  {
     private String text;
 
 
+    ListView listView;
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         LoadData();
         if(text.isEmpty()){
             username = (EditText) findViewById(R.id.username) ;
@@ -64,7 +73,24 @@ public class MainActivity extends AppCompatActivity  {
          username.setText(text);
 
         Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
+        
+        setContentView(R.layout.main_display);
+     }
 
+     public void DisplayData(String[] names, String[] descriptions){
+
+         ListView listView = (ListView) findViewById(R.id.listview);
+
+
+         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
+         listView.setAdapter(adapter);
+
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 Toast.makeText(MainActivity.this, names[position], Toast.LENGTH_SHORT).show();
+             }
+         });
      }
 
      void LoadData () {
