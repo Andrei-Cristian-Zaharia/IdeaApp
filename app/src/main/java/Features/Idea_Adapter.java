@@ -17,6 +17,7 @@ public class Idea_Adapter extends ArrayAdapter<String> {
     Context context;
     String[] name;
     String[] description;
+
     public Idea_Adapter(Context c, String[] _name, String[] _description) {
         super(c, R.layout.list_item ,R.id.name, _name);
 
@@ -35,14 +36,13 @@ public class Idea_Adapter extends ArrayAdapter<String> {
         TextView descriptionText = item_list.findViewById(R.id.description);
 
         nameText.setText(name[position]);
+        String aux_des = description[position];
 
-        for (int  i = 0; i < description.length; i++){
-            if (description[i].length() > 95)
-            description[i] = description[i].substring(0, Math.min(description[i].length(), 95));
-            description[i] = description[i] + "...";
-        }
-
-        descriptionText.setText(description[position]);
+            if (description[position].length() > 95) {
+                aux_des = description[position].substring(0, Math.min(description[position].length(), 95));
+                aux_des += "...";
+            }
+        descriptionText.setText(aux_des);
 
         return item_list;
     }
