@@ -72,7 +72,7 @@ public class Database {
             descriptions[i] = ideas.get(i).get_description();
         }
 
-        activity.DisplayData(names,  ideas);
+        activity.DisplayData(names, ideas);
     }
 
     public static void displayAllIdeas(){
