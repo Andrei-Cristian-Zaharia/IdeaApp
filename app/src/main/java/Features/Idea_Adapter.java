@@ -46,8 +46,4 @@ public class Idea_Adapter extends ArrayAdapter<String> {
 
         return item_list;
     }
-
-    void sortByLikes(){
-
-    }
 }

@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context="Components.MainActivity"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Insert your username"
-        android:id="@+id/text_view"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="200dp"
         android:layout_above="@id/username"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
+        android:layout_marginBottom="10dp"
+        android:text="Insert your username" />
+
 
     <EditText
         android:id="@+id/username"
@@ -23,9 +24,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_view"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="50dp" />
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="70dp"/>
 
-
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="#FF0000"
+        tools:text="User already exist !"
+        tools:textAlignment="center" />
 
     <Button
         android:id="@+id/button"

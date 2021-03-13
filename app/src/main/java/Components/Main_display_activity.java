@@ -1,4 +1,4 @@
-package com.example.ideaapp;
+package Components;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ideaapp.R;
 
 import Features.Database;
 import Features.Idea_Adapter;
@@ -18,13 +20,13 @@ public class Main_display_activity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_display);
 
-        Database db = new Database(this, this);
+        Database.setActivity(this);
+        Database.displayAllIdeas();
     }
 
     public void DisplayData(String[] names, String[] descriptions){
 
         ListView listView = (ListView) findViewById(R.id.listview);
-
 
         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
         listView.setAdapter(adapter);
