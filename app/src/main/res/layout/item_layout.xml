@@ -18,23 +18,30 @@
             android:id="@+id/nameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="The name of the idea"
-            android:autoSizeMinTextSize="40dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:autoSizeMaxTextSize="100dp"
+            android:autoSizeMinTextSize="40dp"
+            android:text="The name of the idea"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/descriptionView"
             android:layout_width="361dp"
-            android:layout_height="113dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:text="Description"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:autoSizeMaxTextSize="100dp"
             android:autoSizeMinTextSize="20dp"
-            android:textStyle="bold" />
+            android:text="Description"
+            android:textStyle="normal" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
