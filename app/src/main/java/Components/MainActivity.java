@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity  {
             errorT = (TextView) findViewById(R.id.error);
 
             button.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View view) {
                     if (username.getText().toString().isEmpty())
@@ -72,17 +73,7 @@ public class MainActivity extends AppCompatActivity  {
             });
         }
         else
-        {
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS , MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.putString(TEXT, null);
-
-            text = sharedPreferences.getString(TEXT , " ");
-            editor.apply();
-
             openActivity();
-        }
      }
 
   void SaveData ()  {
@@ -112,5 +103,4 @@ public class MainActivity extends AppCompatActivity  {
         Intent intent = new Intent(this , Main_display_activity.class);
         startActivity(intent);
      }
-
 }

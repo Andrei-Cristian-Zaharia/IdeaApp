@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "java.io": "^2.4.0",
-    "realm": "^10.2.0"
+    "realm": "^10.2.0",
+    "recyclerlistview": "^3.0.5"
   }
 }
