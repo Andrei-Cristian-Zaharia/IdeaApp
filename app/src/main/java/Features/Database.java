@@ -3,7 +3,7 @@ package Features;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.ideaapp.Main_display_activity;
+import Components.Main_display_activity;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,8 +35,6 @@ public class Database {
                 uiThreadRealm = Realm.getInstance(config);
 
                 Log.v("QUICKSTART: ", "Successfully opened a realm at: " + uiThreadRealm.getPath());
-
-               // displayAllIdeas();
             } else {
                 // server disconnected
             }
