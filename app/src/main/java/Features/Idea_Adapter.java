@@ -4,46 +4,104 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
-import com.mongodb.lang.NonNull;
 
-public class Idea_Adapter extends ArrayAdapter<String> {
+import Models.Idea;
+import io.realm.Case;
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmRecyclerViewAdapter;
 
-    Context context;
-    String[] name;
-    String[] description;
+public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
-    public Idea_Adapter(Context c, String[] _name, String[] _description) {
-        super(c, R.layout.list_item ,R.id.name, _name);
+    Realm realm;
 
-        this.context = c;
-        this.name = _name;
-        this.description = _description;
+    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data){
+        super(data, true, true);
+        this.realm = realm;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
+        IdeaClass holder = new IdeaClass(view);
+        return holder;
+    }
 
-        View item_list = layoutInflater.inflate(R.layout.list_item, parent, false);
-        TextView nameText = item_list.findViewById(R.id.name);
-        TextView descriptionText = item_list.findViewById(R.id.description);
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Idea idea = getData().get(position);
 
-        nameText.setText(name[position]);
-        String aux_des = description[position];
+        IdeaClass mHolder = (IdeaClass) holder;
+        mHolder.bind(idea);
+    }
 
-            if (description[position].length() > 95) {
-                aux_des = description[position].substring(0, Math.min(description[position].length(), 95));
+    public void filterResults(String text) {
+        text = text == null ? null : text.toLowerCase().trim();
+        RealmQuery<Idea> query = realm.where(Idea.class);
+        if(!(text == null || "".equals(text))) {
+            query.contains("_nume", text, Case.INSENSITIVE);
+        }
+        updateData(query.findAllAsync());
+    }
+
+    @Override
+    public Filter getFilter() {
+        IdeaFilter filter = new IdeaFilter(this);
+        return filter;
+    }
+
+    private class IdeaFilter extends Filter{
+        private final Idea_Adapter adapter;
+
+        private IdeaFilter(Idea_Adapter adapter) {
+            super();
+            this.adapter = adapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return new FilterResults();
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            adapter.filterResults(constraint.toString());
+        }
+    }
+
+    private class IdeaClass extends RecyclerView.ViewHolder{
+
+        TextView nameText;
+        TextView descriptionText;
+
+        public IdeaClass(View view){
+            super(view);
+
+            nameText = view.findViewById(R.id.nameView);
+            descriptionText = view.findViewById(R.id.descriptionView);
+        }
+
+        public  void bind(Idea idea){
+            nameText.setText(idea.get_nume());
+
+            String aux_des = idea.get_description();
+
+            if (idea.get_description().length() > 95) {
+                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 95));
                 aux_des += "...";
             }
-        descriptionText.setText(aux_des);
 
-        return item_list;
+            descriptionText.setText(aux_des);
+        }
     }
 }

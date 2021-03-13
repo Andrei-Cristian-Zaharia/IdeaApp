@@ -2,40 +2,74 @@ package Components;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import Features.Database;
 import Features.Idea_Adapter;
+import Models.Idea;
+import Utilities.SpacingItemDecorator;
+import io.realm.OrderedRealmCollection;
 
 public class Main_display_activity  extends AppCompatActivity {
+
+    androidx.appcompat.widget.SearchView searchView;
+    FloatingActionButton addIdeaButton;
+    Idea_Adapter adapter;
+    RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_display);
 
+        searchView = (androidx.appcompat.widget.SearchView) findViewById(R.id.searchBar);
+        addIdeaButton = (FloatingActionButton) findViewById(R.id.addButton);
+
         Database.setActivity(this);
-        Database.displayAllIdeas();
-    }
+        Database.displayAllIdeasSorted("_nume", "ASCENDING");
 
-    public void DisplayData(String[] names, String[] descriptions){
-
-        ListView listView = (ListView) findViewById(R.id.listview);
-
-        Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(Main_display_activity.this, names[position], Toast.LENGTH_SHORT).show();
+            public boolean onQueryTextSubmit(String query) {
+                Main_display_activity.this.adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Main_display_activity.this.adapter.getFilter().filter(newText);
+                return false;
             }
         });
+
+        addIdeaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              //  Database.displayAllIdeasSorted("_likes", "DESCENDING"); sort tested
+            }
+        });
+    }
+
+    public void DisplayData(String[] names, List<Idea> _ideas){
+
+        RecyclerView recycleView = (RecyclerView) findViewById(R.id.recycleView);
+
+        adapter = new Idea_Adapter(getApplicationContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        recycleView.setLayoutManager(mLayoutManager);
+        SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
+        recycleView.addItemDecoration(spacingItemDecorator);
+        recycleView.setAdapter(adapter);
+
     }
 }
