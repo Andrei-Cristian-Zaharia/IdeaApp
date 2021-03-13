@@ -2,12 +2,7 @@ package Features;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.ideaapp.MainActivity;
 import com.example.ideaapp.Main_display_activity;
 
 import java.util.List;
@@ -24,15 +19,12 @@ import io.realm.mongodb.sync.SyncConfiguration;
 
 public class Database {
 
-    String AppId = "ideaapp-mautk";
-    Realm uiThreadRealm;
-    Main_display_activity activity;
-    App app;
+    static Realm uiThreadRealm;
+    static Main_display_activity activity;
 
-    public Database(Context context, Main_display_activity activityObj) {
-        activity = activityObj;
+    public  Database(Context context){
         Realm.init(context);
-        app = new App(new AppConfiguration.Builder(AppId).build());
+        App app = new App(new AppConfiguration.Builder("ideaapp-mautk").build());
 
         Credentials credentials = Credentials.anonymous();
         app.loginAsync(credentials, result -> {
@@ -44,14 +36,16 @@ public class Database {
 
                 Log.v("QUICKSTART: ", "Successfully opened a realm at: " + uiThreadRealm.getPath());
 
-                displayAllIdeas();
+               // displayAllIdeas();
             } else {
                 // server disconnected
             }
         });
     }
 
-    void displayIdeasOf(String user){
+    public static void setActivity(Main_display_activity _activity) { activity = _activity; }
+
+    public static void displayIdeasOf(String user){
         List<Idea> ideas = getIdeasOf(user);
 
         String[] names = new String[ideas.size()];
@@ -65,7 +59,7 @@ public class Database {
         activity.DisplayData(names,descriptions);
     }
 
-    void displayAllIdeas(){
+    public static void displayAllIdeas(){
         List<Idea> ideas = getAllIdeas();
 
         String[] names = new String[ideas.size()];
@@ -79,7 +73,7 @@ public class Database {
         activity.DisplayData(names,descriptions);
     }
 
-    void InsertIdea(String description, String idea_name, String user){
+    public void InsertIdea(String description, String idea_name, String user){
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = new Idea();
             idea.set_nume(idea_name);
@@ -90,7 +84,7 @@ public class Database {
         });
     }
 
-    void InsertUser(String name){
+    public static void InsertUser(String name){
         uiThreadRealm.executeTransaction(r -> {
             UserModel userModel = new UserModel();
             userModel.setUsername(name);
@@ -99,19 +93,19 @@ public class Database {
         });
     }
 
-    List<UserModel> getAllUsers(){
+    public static List<UserModel> getAllUsers(){
         RealmResults<UserModel> results = uiThreadRealm.where(UserModel.class).findAll();
 
         return results;
     }
 
-    List<Idea> getAllIdeas(){
+    public static List<Idea> getAllIdeas(){
         RealmResults<Idea> results = uiThreadRealm.where(Idea.class).findAll();
 
         return results;
     }
 
-    List<Idea> getIdeasOf(String user){
+    public static List<Idea> getIdeasOf(String user){
         RealmResults<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
 
         return results;

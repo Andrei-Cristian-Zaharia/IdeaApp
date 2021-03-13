@@ -13,18 +13,20 @@ import Features.Idea_Adapter;
 
 public class Main_display_activity  extends AppCompatActivity {
 
+    Database db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_display);
 
-        Database db = new Database(this, this);
+        Database.setActivity(this);
+        Database.displayAllIdeas();
     }
 
     public void DisplayData(String[] names, String[] descriptions){
 
         ListView listView = (ListView) findViewById(R.id.listview);
-
 
         Idea_Adapter adapter = new Idea_Adapter(this, names, descriptions);
         listView.setAdapter(adapter);
