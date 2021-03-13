@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
 
+import java.net.PortUnreachableException;
+
 import Models.Idea;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
@@ -23,9 +25,11 @@ import io.realm.RealmRecyclerViewAdapter;
 public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
     Realm realm;
+    private OnNoteListener mOnNoteListener;
 
-    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data){
+    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener){
         super(data, true, true);
+        mOnNoteListener = _onNoteListener;
         this.realm = realm;
     }
 
@@ -33,7 +37,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
-        IdeaClass holder = new IdeaClass(view);
+        IdeaClass holder = new IdeaClass(view, mOnNoteListener);
         return holder;
     }
 
@@ -79,16 +83,21 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         }
     }
 
-    private class IdeaClass extends RecyclerView.ViewHolder{
+    private class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView nameText;
         TextView descriptionText;
 
-        public IdeaClass(View view){
+        OnNoteListener onNoteListener;
+
+        public IdeaClass(View view, OnNoteListener _onNoteListener){
             super(view);
 
             nameText = view.findViewById(R.id.nameView);
             descriptionText = view.findViewById(R.id.descriptionView);
+            onNoteListener = _onNoteListener;
+
+            itemView.setOnClickListener(this);
         }
 
         public  void bind(Idea idea){
@@ -97,11 +106,20 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             String aux_des = idea.get_description();
 
             if (idea.get_description().length() > 95) {
-                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 95));
+                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 170));
                 aux_des += "...";
             }
 
             descriptionText.setText(aux_des);
         }
+
+        @Override
+        public void onClick(View v) {
+            onNoteListener.onNoteClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnNoteListener {
+        void onNoteClick(int position);
     }
 }

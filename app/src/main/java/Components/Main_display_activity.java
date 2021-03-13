@@ -1,6 +1,7 @@
 package Components;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +20,13 @@ import Models.Idea;
 import Utilities.SpacingItemDecorator;
 import io.realm.OrderedRealmCollection;
 
-public class Main_display_activity  extends AppCompatActivity {
+public class Main_display_activity  extends AppCompatActivity implements Idea_Adapter.OnNoteListener {
 
     androidx.appcompat.widget.SearchView searchView;
     FloatingActionButton addIdeaButton;
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
+    private List<Idea> current_ideas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class Main_display_activity  extends AppCompatActivity {
         addIdeaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Database.displayAllIdeasSorted("_likes", "DESCENDING"); sort tested
+               Database.displayAllIdeasSorted("_likes", "DESCENDING");
             }
         });
     }
@@ -62,14 +64,20 @@ public class Main_display_activity  extends AppCompatActivity {
     public void DisplayData(String[] names, List<Idea> _ideas){
 
         RecyclerView recycleView = (RecyclerView) findViewById(R.id.recycleView);
+        current_ideas = _ideas;
 
-        adapter = new Idea_Adapter(getApplicationContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas);
+        adapter = new Idea_Adapter(getApplicationContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recycleView.setLayoutManager(mLayoutManager);
         SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
         recycleView.addItemDecoration(spacingItemDecorator);
         recycleView.setAdapter(adapter);
+    }
 
+    @Override
+    public void onNoteClick(int position) {
+        // add what happens
+        Log.v("Button", current_ideas.get(position).get_nume());
     }
 }
