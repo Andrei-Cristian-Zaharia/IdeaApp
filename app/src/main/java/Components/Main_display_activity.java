@@ -1,4 +1,4 @@
-package com.example.ideaapp;
+package Components;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ideaapp.R;
+
 import Features.Database;
 import Features.Idea_Adapter;
 
 public class Main_display_activity  extends AppCompatActivity {
-
-    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

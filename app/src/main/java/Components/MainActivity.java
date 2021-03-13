@@ -1,15 +1,11 @@
-package com.example.ideaapp;
+package Components;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 
+import com.example.ideaapp.R;
+
 import java.util.List;
 
 import Features.Database;
-import Features.Idea_Adapter;
 import Models.UserModel;
 
 public class MainActivity extends AppCompatActivity  {
@@ -33,11 +30,8 @@ public class MainActivity extends AppCompatActivity  {
 
     public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
-    boolean canSave = true;
 
     private String text;
-
-    ListView listView;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -57,10 +51,10 @@ public class MainActivity extends AppCompatActivity  {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (username.getText().toString().isEmpty())
                         errorT.setText("Username can't be empty");
                     else {
+                        boolean canSave = true;
                         List<UserModel> users = Database.getAllUsers();
 
                         for (UserModel user : users)
