@@ -5,6 +5,7 @@ import android.util.Log;
 
 import Components.Main_display_activity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.Credentials;
@@ -43,8 +45,10 @@ public class Database {
 
     public static void setActivity(Main_display_activity _activity) { activity = _activity; }
 
+    public static Realm getRealm() { return uiThreadRealm; }
+
     public static void displayIdeasOf(String user){
-        List<Idea> ideas = getIdeasOf(user);
+        List<Idea> ideas =  getIdeasOf(user);
 
         String[] names = new String[ideas.size()];
         String[] descriptions = new String[ideas.size()];
@@ -54,11 +58,25 @@ public class Database {
             descriptions[i] = ideas.get(i).get_description();
         }
 
-        activity.DisplayData(names,descriptions);
+        activity.DisplayData(names,  ideas);
+    }
+
+    public static void displayAllIdeasSorted(String type, String comparator){
+        List<Idea> ideas = getAllIdeasSortBy(type, comparator);
+
+        String[] names = new String[ideas.size()];
+        String[] descriptions = new String[ideas.size()];
+
+        for (int i = 0; i < ideas.size(); i++){
+            names[i] = ideas.get(i).get_nume();
+            descriptions[i] = ideas.get(i).get_description();
+        }
+
+        activity.DisplayData(names,  ideas);
     }
 
     public static void displayAllIdeas(){
-        List<Idea> ideas = getAllIdeas();
+        List<Idea> ideas =  getAllIdeas();
 
         String[] names = new String[ideas.size()];
         String[] descriptions = new String[ideas.size()];
@@ -68,7 +86,7 @@ public class Database {
             descriptions[i] = ideas.get(i).get_description();
         }
 
-        activity.DisplayData(names,descriptions);
+        activity.DisplayData(names, ideas);
     }
 
     public void InsertIdea(String description, String idea_name, String user){
@@ -92,19 +110,30 @@ public class Database {
     }
 
     public static List<UserModel> getAllUsers(){
-        RealmResults<UserModel> results = uiThreadRealm.where(UserModel.class).findAll();
+        List<UserModel> results = uiThreadRealm.where(UserModel.class).findAll();
 
         return results;
     }
 
     public static List<Idea> getAllIdeas(){
-        RealmResults<Idea> results = uiThreadRealm.where(Idea.class).findAll();
+        List<Idea> results = uiThreadRealm.where(Idea.class).findAll();
+
+        return results;
+    }
+
+    public static List<Idea> getAllIdeasSortBy(String type, String comparator){
+        List<Idea> results;
+
+        if (comparator.equals("ASCENDING"))
+            results = uiThreadRealm.where(Idea.class).findAll().sort(type, Sort.ASCENDING);
+        else
+            results = uiThreadRealm.where(Idea.class).findAll().sort(type, Sort.DESCENDING);
 
         return results;
     }
 
     public static List<Idea> getIdeasOf(String user){
-        RealmResults<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
+        List<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
 
         return results;
     }
