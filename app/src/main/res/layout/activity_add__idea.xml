@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Features.Add_Idea">
+
+    <TextView
+        android:id="@+id/nameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:autoSizeMaxTextSize="100dp"
+        android:autoSizeMinTextSize="40dp"
+        android:text="The name of the idea"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/nameViewscris"
+        android:layout_width="222dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameView" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="397dp"
+        android:layout_below="@+id/descriptionView"
+        android:layout_marginTop="9dp">
+
+        <EditText
+            android:id="@+id/description1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+
+            />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/descriptionView"
+        android:layout_width="367dp"
+        android:layout_height="31dp"
+        android:layout_below="@id/nameViewscris"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:autoSizeMaxTextSize="100dp"
+        android:autoSizeMinTextSize="20dp"
+        android:text="Description"
+        android:textStyle="normal" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="107dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/scroll_view"
+        android:layout_centerHorizontal="true"
+        android:text="OK" />
+
+</RelativeLayout>
