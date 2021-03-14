@@ -26,6 +26,7 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
     FloatingActionButton addIdeaButton;
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView recycleView;
     private List<Idea> current_ideas;
 
     @Override
@@ -35,6 +36,10 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
 
         searchView = (androidx.appcompat.widget.SearchView) findViewById(R.id.searchBar);
         addIdeaButton = (FloatingActionButton) findViewById(R.id.addButton);
+        recycleView = (RecyclerView) findViewById(R.id.recycleView);
+
+        SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
+        recycleView.addItemDecoration(spacingItemDecorator);
 
         Database.setActivity(this);
         Database.displayAllIdeasSorted("_nume", "ASCENDING");
@@ -62,16 +67,12 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
     }
 
     public void DisplayData(String[] names, List<Idea> _ideas){
-
-        RecyclerView recycleView = (RecyclerView) findViewById(R.id.recycleView);
         current_ideas = _ideas;
 
         adapter = new Idea_Adapter(getApplicationContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recycleView.setLayoutManager(mLayoutManager);
-        SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
-        recycleView.addItemDecoration(spacingItemDecorator);
         recycleView.setAdapter(adapter);
     }
 
