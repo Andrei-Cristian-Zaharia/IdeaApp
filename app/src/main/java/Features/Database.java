@@ -3,16 +3,13 @@ package Features;
 import android.content.Context;
 import android.util.Log;
 
-import Components.Main_display_activity;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import Components.Main_display_activity;
 import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;

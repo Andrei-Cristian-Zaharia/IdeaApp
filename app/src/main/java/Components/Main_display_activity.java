@@ -64,6 +64,8 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
         addIdeaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                openActivityAdd();
                Database.displayAllIdeasSorted("_likes", "DESCENDING");
             }
         });
@@ -90,5 +92,11 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
         intent.putExtra(EXTRA_TEXT1,idea.get_nume());
         intent.putExtra(EXTRA_TEXT2,idea.get_description());
         startActivity(intent);
+    }
+
+    void openActivityAdd(){
+        Intent intent = new Intent(this , activity_add_ideea.class);
+        startActivity(intent);
+
     }
 }

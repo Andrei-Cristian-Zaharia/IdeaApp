@@ -1,5 +1,6 @@
 package Components;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,9 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-
-import android.annotation.SuppressLint;
 
 import com.example.ideaapp.R;
 
@@ -31,7 +29,7 @@ public class MainActivity extends AppCompatActivity  {
     public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
 
-    private String text;
+    private static String text;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -102,5 +100,9 @@ public class MainActivity extends AppCompatActivity  {
      public void openActivity() {
         Intent intent = new Intent(this , Main_display_activity.class);
         startActivity(intent);
+     }
+
+     public static String returnUser(){
+        return text;
      }
 }
