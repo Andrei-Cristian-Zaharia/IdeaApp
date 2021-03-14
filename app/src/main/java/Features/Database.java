@@ -89,7 +89,7 @@ public class Database {
         activity.DisplayData(names, ideas);
     }
 
-    public void InsertIdea(String description, String idea_name, String user){
+    public static void InsertIdea(String description, String idea_name, String user){
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = new Idea();
             idea.set_nume(idea_name);

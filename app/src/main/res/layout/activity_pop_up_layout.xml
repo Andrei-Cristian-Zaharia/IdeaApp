@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pop_up_layout"
-    android:orientation="vertical">
-
+    android:background="@drawable/rectangle"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="2dp">
 
     <TextView
         android:id="@+id/name1"
         android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_margin="10dp"
+        android:layout_height="80dp"
         android:autoSizeMaxTextSize="100dp"
         android:autoSizeMinTextSize="40dp"
+        android:background="@drawable/round_corners_up"
+        android:gravity="center"
+        android:textSize="25sp"
         android:textStyle="bold"
-        tools:text="Name"
-        android:textSize="25sp"/>
+        tools:text="Name" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="20dp">
+
         <TextView
             android:id="@+id/description1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:autoSizeMaxTextSize="100dp"
             android:autoSizeMinTextSize="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="Description"
-            />
+            tools:text="Description" />
 
     </ScrollView>
-
-</LinearLayout>
+</RelativeLayout>
