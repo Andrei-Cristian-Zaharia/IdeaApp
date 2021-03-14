@@ -11,22 +11,28 @@
     <TextView
         android:id="@+id/name1"
         android:layout_width="match_parent"
-        android:layout_height="126dp"
+        android:layout_height="57dp"
         android:layout_margin="10dp"
         android:autoSizeMaxTextSize="100dp"
         android:autoSizeMinTextSize="40dp"
         android:textStyle="bold"
-        tools:text="Name" />
-
+        tools:text="Name"
+        android:textSize="25sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/description1"
         android:layout_width="match_parent"
-        android:layout_height="543dp"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:autoSizeMaxTextSize="100dp"
         android:autoSizeMinTextSize="20dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="Description" />
+        tools:text="Description"
+        />
+
+    </ScrollView>
 
 </LinearLayout>
