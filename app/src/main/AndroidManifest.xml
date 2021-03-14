@@ -12,9 +12,8 @@
         <activity android:name="Features.Add_Idea"></activity>
         <activity android:name="Components.activity_add_ideea"></activity>
         <activity android:name="Components.Main_display_activity" />
-        <activity
-            android:name=".pop_up_layout"
-            android:theme="@style/Theme.IdeaApp1" />
+        <activity android:name="Components.pop_up_layout"
+            android:theme="@style/Theme.IdeaApp1"></activity>
         <activity android:name="Components.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
