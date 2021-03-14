@@ -64,9 +64,7 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
         addIdeaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 openActivityAdd();
-               Database.displayAllIdeasSorted("_likes", "DESCENDING");
             }
         });
     }
