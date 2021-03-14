@@ -1,8 +1,10 @@
 package Components;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
+import com.example.ideaapp.pop_up_layout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -22,6 +25,8 @@ import io.realm.OrderedRealmCollection;
 
 public class Main_display_activity  extends AppCompatActivity implements Idea_Adapter.OnNoteListener {
 
+    public static final String EXTRA_TEXT1= "com.example.ideaapp.EXTRA_TEXT1 ";
+    public static final String EXTRA_TEXT2= "com.example.ideaapp.EXTRA_TEXT2 ";
     androidx.appcompat.widget.SearchView searchView;
     FloatingActionButton addIdeaButton;
     Idea_Adapter adapter;
@@ -78,7 +83,14 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
 
     @Override
     public void onNoteClick(int position) {
-        // add what happens
+        openLayoutActivity(current_ideas.get(position));
         Log.v("Button", current_ideas.get(position).get_nume());
+    }
+
+    void openLayoutActivity(Idea idea){
+        Intent intent = new Intent(this , pop_up_layout.class);
+        intent.putExtra(EXTRA_TEXT1,idea.get_nume());
+        intent.putExtra(EXTRA_TEXT2,idea.get_description());
+        startActivity(intent);
     }
 }
