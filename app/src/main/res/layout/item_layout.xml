@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#6b8c42"
-    app:cardCornerRadius="10dp"
-    android:padding="10dp">
+    app:cardBackgroundColor="#bbbfca"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+    android:padding="25dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,32 +18,31 @@
 
         <TextView
             android:id="@+id/nameView"
-            android:layout_width="wrap_content"
+            android:layout_width="363dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:autoSizeMaxTextSize="100dp"
-            android:autoSizeMinTextSize="40dp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="15sp"
             android:text="The name of the idea"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/descriptionView"
-            android:layout_width="361dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="368dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:autoSizeMaxTextSize="100dp"
-            android:autoSizeMinTextSize="20dp"
             android:text="Description"
+            android:textSize="17sp"
             android:textStyle="normal" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,8 @@
-package com.example.ideaapp;
+package Components;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -8,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ideaapp.R;
 
 import Components.Main_display_activity;
 
@@ -19,7 +23,6 @@ public class pop_up_layout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_layout);
         Intent intent = getIntent();
-
 
         TextView textview1 = (TextView) findViewById(R.id.name1);
         TextView textview2 = (TextView) findViewById(R.id.description1);
@@ -36,12 +39,13 @@ public class pop_up_layout extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width * .7),(int)(height * .8));
+        getWindow().setLayout((int)(width * .95),(int)(height * .7));
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
 
         params.gravity = Gravity.CENTER;
-        params.x = 5 ;
+        params.x = 0 ;
         params.y = -40;
 
         getWindow().setAttributes(params);
