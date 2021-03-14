@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.IdeaApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">#bbbfca</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -16,6 +16,7 @@
         <item name = "android:windowCloseOnTouchOutside">true</item>
     </style>
     <style name="Theme.IdeaApp1" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#f4f4f2</item>
         <item name = "android:windowIsTranslucent">true</item>
         <item name = "android:windowCloseOnTouchOutside">true</item>
     </style>
