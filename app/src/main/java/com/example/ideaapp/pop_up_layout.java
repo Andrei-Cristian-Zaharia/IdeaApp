@@ -22,7 +22,11 @@ public class pop_up_layout extends AppCompatActivity {
         TextView textview1 = (TextView) findViewById(R.id.name1);
         TextView textview2 = (TextView) findViewById(R.id.description1);
 
+        String text1 = intent.getStringExtra(Main_display_activity.EXTRA_TEXT1);
+        String text2 = intent.getStringExtra(Main_display_activity.EXTRA_TEXT2);
 
+        textview1.setText(text1);
+        textview2.setText(text2);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);

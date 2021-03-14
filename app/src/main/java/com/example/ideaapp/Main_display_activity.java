@@ -1,9 +1,11 @@
 package com.example.ideaapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,8 @@ import Features.Database;
 import Features.Idea_Adapter;
 
 public class Main_display_activity  extends AppCompatActivity {
+    public static final String EXTRA_TEXT1= "com.example.ideaapp.EXTRA_TEXT1 ";
+    public static final String EXTRA_TEXT2= "com.example.ideaapp.EXTRA_TEXT2 ";
 
 
     @Override
@@ -34,10 +38,21 @@ public class Main_display_activity  extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
+                openLayoutActivity(descriptions[position]);
                 Toast.makeText(Main_display_activity.this, names[position], Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    void openLayoutActivity(String description){
+        TextView Textview1 = (TextView) findViewById(R.id.name) ;
+        String text1 = Textview1.getText().toString();
+
+
+
+        Intent intent = new Intent(this , pop_up_layout.class);
+        intent.putExtra(EXTRA_TEXT1,text1);
+        intent.putExtra(EXTRA_TEXT2,description);
+        startActivity(intent);
     }
 
 
