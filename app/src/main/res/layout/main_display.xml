@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#495464"
-    >
+    android:background="#495464">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
@@ -14,20 +13,24 @@
         android:layout_marginTop="60dp"
         android:padding="10dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="650dp"
-        android:scaleX="1.4"
-        android:scaleY="1.4"
-        app:fabSize="auto"
-        app:maxImageSize="100dp" />
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            app:fabSize="auto" />
+    </FrameLayout>
 </RelativeLayout>

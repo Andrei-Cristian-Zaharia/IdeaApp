@@ -104,11 +104,13 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             nameText.setText(idea.get_nume());
 
             String aux_des = idea.get_description();
-
-            if (idea.get_description().length() > 150) {
-                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 150));
+/*
+            if (idea.get_description().length() > 120) {
+                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 120));
                 aux_des += "...";
             }
+
+ */
 
             descriptionText.setText(aux_des);
         }
