@@ -50,4 +50,10 @@ public class pop_up_layout extends AppCompatActivity {
 
         getWindow().setAttributes(params);
     }
+
+    public void onDestroy() {
+        super.onDestroy();
+
+        Main_display_activity.closeLayout();
+    }
 }
