@@ -87,6 +87,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
         TextView nameText;
         TextView descriptionText;
+        TextView likesText;
 
         OnNoteListener onNoteListener;
 
@@ -95,6 +96,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
             nameText = view.findViewById(R.id.nameView);
             descriptionText = view.findViewById(R.id.descriptionView);
+            likesText = view.findViewById(R.id.likesText);
             onNoteListener = _onNoteListener;
 
             itemView.setOnClickListener(this);
@@ -102,17 +104,8 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
         public  void bind(Idea idea){
             nameText.setText(idea.get_nume());
-
-            String aux_des = idea.get_description();
-/*
-            if (idea.get_description().length() > 120) {
-                aux_des = idea.get_description().substring(0, Math.min(idea.get_description().length(), 120));
-                aux_des += "...";
-            }
-
- */
-
-            descriptionText.setText(aux_des);
+            likesText.setText("Likes: " + idea.get_likes().toString());
+            descriptionText.setText(idea.get_description());
         }
 
         @Override

@@ -6,12 +6,20 @@
     android:layout_height="match_parent"
     android:background="#495464">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:id="@+id/swipeContainer"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
         android:padding="10dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchBar"

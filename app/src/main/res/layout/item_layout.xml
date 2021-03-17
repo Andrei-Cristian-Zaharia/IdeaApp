@@ -46,5 +46,19 @@
             android:ellipsize="end"
             android:maxLines="5"
             android:textStyle="normal" />
+
+        <FrameLayout
+            android:layout_width="360dp"
+            android:layout_height="165dp">
+
+            <TextView
+                android:id="@+id/likesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="20dp"
+                android:text="Likes: 99"
+                android:textStyle="bold" />
+        </FrameLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
