@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="Features.Add_Idea">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <TextView
         android:id="@+id/nameView"
         android:layout_width="wrap_content"
@@ -21,11 +25,12 @@
         android:text="The name of the idea"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/nameViewscris"
-        android:layout_width="222dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nameView" />
+
+        <EditText
+            android:id="@+id/nameViewscris"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nameView" />
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -60,12 +65,13 @@
         android:text="Description"
         android:textStyle="normal" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="107dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/scroll_view"
-        android:layout_centerHorizontal="true"
-        android:text="OK" />
-
+        <Button
+            android:id="@+id/button"
+            android:layout_width="107dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/scroll_view"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:text="OK" />
+    </RelativeLayout>
 </RelativeLayout>

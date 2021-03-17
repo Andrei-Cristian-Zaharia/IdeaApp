@@ -95,6 +95,5 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
     void openActivityAdd(){
         Intent intent = new Intent(this , activity_add_ideea.class);
         startActivity(intent);
-
     }
 }
