@@ -21,16 +21,18 @@ import Models.Idea;
 import Utilities.SpacingItemDecorator;
 import io.realm.OrderedRealmCollection;
 
-public class Main_display_activity  extends AppCompatActivity implements Idea_Adapter.OnNoteListener {
+public class Main_display_activity extends AppCompatActivity implements Idea_Adapter.OnNoteListener {
 
-    public static final String EXTRA_TEXT1= "com.example.ideaapp.EXTRA_TEXT1 ";
-    public static final String EXTRA_TEXT2= "com.example.ideaapp.EXTRA_TEXT2 ";
+    public static final String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
+    public static final String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
     androidx.appcompat.widget.SearchView searchView;
     FloatingActionButton addIdeaButton;
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recycleView;
     private List<Idea> current_ideas;
+
+    static boolean isOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
         });
     }
 
-    public void DisplayData(String[] names, List<Idea> _ideas){
+    public void DisplayData(String[] names, List<Idea> _ideas) {
         current_ideas = _ideas;
 
         adapter = new Idea_Adapter(getApplicationContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this);
@@ -85,15 +87,19 @@ public class Main_display_activity  extends AppCompatActivity implements Idea_Ad
         Log.v("Button", current_ideas.get(position).get_nume());
     }
 
-    void openLayoutActivity(Idea idea){
-        Intent intent = new Intent(this , pop_up_layout.class);
-        intent.putExtra(EXTRA_TEXT1,idea.get_nume());
-        intent.putExtra(EXTRA_TEXT2,idea.get_description());
-        startActivity(intent);
+    void openLayoutActivity(Idea idea) {
+        if (!isOpen) { isOpen = true;
+            Intent intent = new Intent(this, pop_up_layout.class);
+            intent.putExtra(EXTRA_TEXT1, idea.get_nume());
+            intent.putExtra(EXTRA_TEXT2, idea.get_description());
+            startActivity(intent);
+        }
     }
 
-    void openActivityAdd(){
-        Intent intent = new Intent(this , activity_add_ideea.class);
+    static void closeLayout() { isOpen = false; }
+
+    void openActivityAdd() {
+        Intent intent = new Intent(this, activity_add_ideea.class);
         startActivity(intent);
     }
 }
