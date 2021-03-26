@@ -38,6 +38,21 @@
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Description" />
-
     </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="2dp"
+            android:scaleX=".7"
+            android:scaleY=".7"
+            app:fabSize="auto" />
+    </FrameLayout>
 </RelativeLayout>

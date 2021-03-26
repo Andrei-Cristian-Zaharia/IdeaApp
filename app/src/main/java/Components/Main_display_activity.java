@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ideaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +31,7 @@ public class Main_display_activity extends AppCompatActivity implements Idea_Ada
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recycleView;
+    SwipeRefreshLayout swipeContainer;
     private List<Idea> current_ideas;
 
     static boolean isOpen;
@@ -42,6 +44,7 @@ public class Main_display_activity extends AppCompatActivity implements Idea_Ada
         searchView = (androidx.appcompat.widget.SearchView) findViewById(R.id.searchBar);
         addIdeaButton = (FloatingActionButton) findViewById(R.id.addButton);
         recycleView = (RecyclerView) findViewById(R.id.recycleView);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
         recycleView.addItemDecoration(spacingItemDecorator);
@@ -69,6 +72,13 @@ public class Main_display_activity extends AppCompatActivity implements Idea_Ada
                 openActivityAdd();
             }
         });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTimelineAsync();
+            }
+        });
     }
 
     public void DisplayData(String[] names, List<Idea> _ideas) {
@@ -79,6 +89,11 @@ public class Main_display_activity extends AppCompatActivity implements Idea_Ada
 
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(adapter);
+    }
+
+    public void fetchTimelineAsync() {
+        Database.displayAllIdeas();
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
