@@ -1,5 +1,6 @@
 package Features;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
-
-import java.net.PortUnreachableException;
 
 import Models.Idea;
 import io.realm.Case;
@@ -103,6 +102,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());

@@ -1,7 +1,6 @@
 package Features;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
@@ -36,10 +34,6 @@ public class Database {
                         Objects.requireNonNull(app.currentUser()), "IdeaApp").allowWritesOnUiThread(true).build();
 
                 uiThreadRealm = Realm.getInstance(config);
-
-                Log.v("QUICKSTART: ", "Successfully opened a realm at: " + uiThreadRealm.getPath());
-            } else {
-                // server disconnected
             }
         });
     }

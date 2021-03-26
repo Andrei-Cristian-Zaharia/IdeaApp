@@ -15,9 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ideaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import Components.Main_display_activity;
 import Features.Database;
-import Models.Idea;
 
 
 public class pop_up_layout extends AppCompatActivity {
