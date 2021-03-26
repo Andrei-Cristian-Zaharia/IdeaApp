@@ -97,12 +97,13 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             nameText = view.findViewById(R.id.nameView);
             descriptionText = view.findViewById(R.id.descriptionView);
             likesText = view.findViewById(R.id.likesText);
+
             onNoteListener = _onNoteListener;
 
             itemView.setOnClickListener(this);
         }
 
-        public  void bind(Idea idea){
+        public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
             descriptionText.setText(idea.get_description());

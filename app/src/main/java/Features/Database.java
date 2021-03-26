@@ -1,15 +1,19 @@
 package Features;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.List;
 import java.util.Objects;
 
+import Components.MainActivity;
 import Components.Main_display_activity;
 import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
@@ -58,7 +62,7 @@ public class Database {
         activity.DisplayData(names,  ideas);
     }
 
-    public static void displayAllIdeasSorted(String type, String comparator){
+    public static void displayAllIdeasSorted(String type, String comparator){ //ASCENDING, DESCENDING
         List<Idea> ideas = getAllIdeasSortBy(type, comparator);
 
         String[] names = new String[ideas.size()];
@@ -133,5 +137,45 @@ public class Database {
         List<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
 
         return results;
+    }
+
+    public static void giveLike(String ideaName){
+        String name = MainActivity.text;
+        uiThreadRealm.executeTransaction(r -> {
+            Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
+            idea.set_likes(idea.get_likes() + 1);
+
+            UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+            RealmList<String> ideas = user.getLiked_ideas();
+            ideas.add(ideaName);
+
+            r.insertOrUpdate(idea);
+        });
+    }
+
+    public static void removeLike(String ideaName){
+        String name = MainActivity.text;
+        uiThreadRealm.executeTransaction(r -> {
+            Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
+            idea.set_likes(idea.get_likes() - 1);
+
+            UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+            RealmList<String> ideas = user.getLiked_ideas();
+            ideas.remove(ideaName);
+
+            r.insertOrUpdate(user);
+            r.insertOrUpdate(idea);
+        });
+    }
+
+    public static boolean isIdeaLiked(String ideaName){
+        String name = MainActivity.text;
+        UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+
+        RealmList<String> ideas = user.getLiked_ideas();
+
+        for (String idea_name: ideas)
+            if (idea_name.equals(ideaName)) return true;
+        return false;
     }
 }

@@ -29,16 +29,16 @@ public class MainActivity extends AppCompatActivity  {
     public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
 
-    private static String text;
+    public static String text;
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        LoadData();
         Database db = new Database(this);
 
-        LoadData();
         if(text.isEmpty()){
             setContentView(R.layout.activity_main);
 
@@ -88,7 +88,9 @@ public class MainActivity extends AppCompatActivity  {
          username.setText(text);
 
         Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
-        
+
+        LoadData();
+
         setContentView(R.layout.main_display);
      }
 
