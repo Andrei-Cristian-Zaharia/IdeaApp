@@ -4,50 +4,118 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
-import com.mongodb.lang.NonNull;
 
-public class Idea_Adapter extends ArrayAdapter<String> {
+import java.net.PortUnreachableException;
 
-    Context context;
-    String[] name;
-    String[] description;
+import Models.Idea;
+import io.realm.Case;
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmRecyclerViewAdapter;
 
-    public Idea_Adapter(Context c, String[] _name, String[] _description) {
-        super(c, R.layout.list_item ,R.id.name, _name);
+public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
-        this.context = c;
-        this.name = _name;
-        this.description = _description;
+    Realm realm;
+    private OnNoteListener mOnNoteListener;
+
+    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener){
+        super(data, true, true);
+        mOnNoteListener = _onNoteListener;
+        this.realm = realm;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View item_list = layoutInflater.inflate(R.layout.list_item, parent, false);
-        TextView nameText = item_list.findViewById(R.id.name);
-        TextView descriptionText = item_list.findViewById(R.id.description);
-
-        nameText.setText(name[position]);
-        String aux_des = description[position];
-
-            if (description[position].length() > 95) {
-                aux_des = description[position].substring(0, Math.min(description[position].length(), 95));
-                aux_des += "...";
-            }
-        descriptionText.setText(aux_des);
-
-        return item_list;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
+        IdeaClass holder = new IdeaClass(view, mOnNoteListener);
+        return holder;
     }
 
-    void sortByLikes(){
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Idea idea = getData().get(position);
 
+        IdeaClass mHolder = (IdeaClass) holder;
+        mHolder.bind(idea);
+    }
+
+    public void filterResults(String text) {
+        text = text == null ? null : text.toLowerCase().trim();
+        RealmQuery<Idea> query = realm.where(Idea.class);
+        if(!(text == null || "".equals(text))) {
+            query.contains("_nume", text, Case.INSENSITIVE);
+        }
+        updateData(query.findAllAsync());
+    }
+
+    @Override
+    public Filter getFilter() {
+        IdeaFilter filter = new IdeaFilter(this);
+        return filter;
+    }
+
+    private class IdeaFilter extends Filter{
+        private final Idea_Adapter adapter;
+
+        private IdeaFilter(Idea_Adapter adapter) {
+            super();
+            this.adapter = adapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return new FilterResults();
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            adapter.filterResults(constraint.toString());
+        }
+    }
+
+    private class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        TextView nameText;
+        TextView descriptionText;
+        TextView likesText;
+
+        OnNoteListener onNoteListener;
+
+        public IdeaClass(View view, OnNoteListener _onNoteListener){
+            super(view);
+
+            nameText = view.findViewById(R.id.nameView);
+            descriptionText = view.findViewById(R.id.descriptionView);
+            likesText = view.findViewById(R.id.likesText);
+
+            onNoteListener = _onNoteListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(Idea idea){
+            nameText.setText(idea.get_nume());
+            likesText.setText("Likes: " + idea.get_likes().toString());
+            descriptionText.setText(idea.get_description());
+        }
+
+        @Override
+        public void onClick(View v) {
+            onNoteListener.onNoteClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnNoteListener {
+        void onNoteClick(int position);
     }
 }
