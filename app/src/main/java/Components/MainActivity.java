@@ -90,8 +90,6 @@ public class MainActivity extends AppCompatActivity  {
         Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
 
         LoadData();
-
-        setContentView(R.layout.main_display);
      }
 
      void LoadData () {
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity  {
      }
 
      public void openActivity() {
-        Intent intent = new Intent(this , Main_display_activity.class);
+        Intent intent = new Intent(this , PageLoader.class);
         startActivity(intent);
      }
 

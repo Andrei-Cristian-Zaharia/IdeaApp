@@ -1,13 +1,12 @@
 package Features;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Objects;
 
 import Components.MainActivity;
-import Components.Main_display_activity;
+import Fragments.FragmentMainDisplay;
 import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
@@ -21,7 +20,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
 public class Database {
 
     static Realm uiThreadRealm;
-    static Main_display_activity activity;
+    static FragmentMainDisplay activity;
 
     public  Database(Context context){
         Realm.init(context);
@@ -38,7 +37,7 @@ public class Database {
         });
     }
 
-    public static void setActivity(Main_display_activity _activity) { activity = _activity; }
+    public static void setActivity(FragmentMainDisplay _activity) { activity = _activity; }
 
     public static Realm getRealm() { return uiThreadRealm; }
 

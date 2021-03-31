@@ -16,6 +16,7 @@ import com.example.ideaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import Features.Database;
+import Fragments.FragmentMainDisplay;
 
 
 public class pop_up_layout extends AppCompatActivity {
@@ -33,8 +34,8 @@ public class pop_up_layout extends AppCompatActivity {
         TextView textview2 = (TextView) findViewById(R.id.description1);
         addButton = findViewById(R.id.addButton);
 
-        String text1 = intent.getStringExtra(Main_display_activity.EXTRA_TEXT1);
-        String text2 = intent.getStringExtra(Main_display_activity.EXTRA_TEXT2);
+        String text1 = intent.getStringExtra(FragmentMainDisplay.EXTRA_TEXT1);
+        String text2 = intent.getStringExtra(FragmentMainDisplay.EXTRA_TEXT2);
 
         textview1.setText(text1);
         textview2.setText(text2);
@@ -73,6 +74,6 @@ public class pop_up_layout extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
 
-        Main_display_activity.closeLayout();
+        FragmentMainDisplay.closeLayout();
     }
 }
