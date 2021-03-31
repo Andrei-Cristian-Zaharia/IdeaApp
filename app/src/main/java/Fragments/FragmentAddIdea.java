@@ -17,11 +17,12 @@ import Features.Database;
 import static Components.MainActivity.returnUser;
 
 public class FragmentAddIdea extends Fragment {
-    EditText nume , descriere;
+    EditText nume, descriere;
     String nume1, descriere1;
     Button button;
 
-    public FragmentAddIdea() {}
+    public FragmentAddIdea() {
+    }
 
     public static FragmentAddIdea newInstance(String param1, String param2) {
         FragmentAddIdea fragment = new FragmentAddIdea();
@@ -46,10 +47,10 @@ public class FragmentAddIdea extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nume1= nume.getText().toString();
-                descriere1=descriere.getText().toString();
-                if(nume1.length()>3 && descriere1.length()>10)
-                    Database.InsertIdea(descriere1,nume1,returnUser());
+                nume1 = nume.getText().toString();
+                descriere1 = descriere.getText().toString();
+                if (nume1.length() > 3 && descriere1.length() > 10)
+                    Database.InsertIdea(descriere1, nume1, returnUser());
             }
         });
 

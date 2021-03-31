@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rectangle"
-    app:cardCornerRadius="25dp"
-    app:cardElevation="2dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="Fragments.FragmentPopUp">
 
     <TextView
         android:id="@+id/name1"
@@ -14,7 +11,6 @@
         android:layout_height="80dp"
         android:autoSizeMaxTextSize="100dp"
         android:autoSizeMinTextSize="40dp"
-        android:background="@drawable/round_corners_up"
         android:gravity="center"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -55,4 +51,4 @@
             android:scaleY=".7"
             app:fabSize="auto" />
     </FrameLayout>
-</RelativeLayout>
+</FrameLayout>

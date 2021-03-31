@@ -25,21 +25,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:scaleX="1.2"
-            android:scaleY="1.2"
-            app:fabSize="auto" />
-    </FrameLayout>
-
 </FrameLayout>

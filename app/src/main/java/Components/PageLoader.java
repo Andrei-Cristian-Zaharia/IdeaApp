@@ -15,7 +15,7 @@ import Features.FragmentAdapter;
 public class PageLoader extends AppCompatActivity {
 
     TabLayout tabLayout;
-    ViewPager2 viewPager2;
+    static ViewPager2 viewPager2;
     FragmentAdapter adapter;
 
     @Override
@@ -33,6 +33,7 @@ public class PageLoader extends AppCompatActivity {
 
         tabLayout.addTab(tabLayout.newTab().setText("Add new idea"));
         tabLayout.addTab(tabLayout.newTab().setText("Main display"));
+        tabLayout.addTab(tabLayout.newTab().setText("Idea"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -57,5 +58,9 @@ public class PageLoader extends AppCompatActivity {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+    }
+
+    public static void ChangeCurrentItem(int position){
+        viewPager2.setCurrentItem(position);
     }
 }
