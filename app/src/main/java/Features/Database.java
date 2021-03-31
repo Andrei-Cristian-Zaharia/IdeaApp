@@ -1,19 +1,16 @@
 package Features;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Objects;
 
 import Components.MainActivity;
-import Components.Main_display_activity;
+import Fragments.FragmentMainDisplay;
 import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
@@ -23,7 +20,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
 public class Database {
 
     static Realm uiThreadRealm;
-    static Main_display_activity activity;
+    static FragmentMainDisplay activity;
 
     public  Database(Context context){
         Realm.init(context);
@@ -36,15 +33,11 @@ public class Database {
                         Objects.requireNonNull(app.currentUser()), "IdeaApp").allowWritesOnUiThread(true).build();
 
                 uiThreadRealm = Realm.getInstance(config);
-
-                Log.v("QUICKSTART: ", "Successfully opened a realm at: " + uiThreadRealm.getPath());
-            } else {
-                // server disconnected
             }
         });
     }
 
-    public static void setActivity(Main_display_activity _activity) { activity = _activity; }
+    public static void setActivity(FragmentMainDisplay _activity) { activity = _activity; }
 
     public static Realm getRealm() { return uiThreadRealm; }
 
