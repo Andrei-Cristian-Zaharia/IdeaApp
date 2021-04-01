@@ -1,20 +1,21 @@
 package Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SearchView;
 
-import androidx.appcompat.widget.SearchView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.ideaapp.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
     public static String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
     public static String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
-    androidx.appcompat.widget.SearchView searchView;
+
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recycleView;
@@ -49,15 +50,17 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
 
-        searchView = (androidx.appcompat.widget.SearchView) root.findViewById(R.id.searchBar);
+
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
 
@@ -67,19 +70,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         Database.setActivity(this);
         Database.displayAllIdeasSorted("_nume", "ASCENDING");
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                FragmentMainDisplay.this.adapter.getFilter().filter(query);
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                FragmentMainDisplay.this.adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,4 +111,44 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     }
 
     public static void closeLayout(){ isOpen = false; }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here!");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                FragmentMainDisplay.this.adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                FragmentMainDisplay.this.adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+
+                return true;
+            case R.id.item2:
+
+                return true;
+            case R.id.item3:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
