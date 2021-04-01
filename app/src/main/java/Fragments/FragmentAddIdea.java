@@ -50,7 +50,11 @@ public class FragmentAddIdea extends Fragment {
                 nume1 = nume.getText().toString();
                 descriere1 = descriere.getText().toString();
                 if (nume1.length() > 3 && descriere1.length() > 10)
+                {
                     Database.InsertIdea(descriere1, nume1, returnUser());
+                    nume.setText("");
+                    descriere.setText("");
+                }
             }
         });
 

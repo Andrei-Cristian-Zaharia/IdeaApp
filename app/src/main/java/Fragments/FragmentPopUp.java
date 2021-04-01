@@ -53,9 +53,11 @@ public class FragmentPopUp extends Fragment {
         if (text1.equals("com.example.ideaapp.EXTRA_TEXT1 ")) {
             textview1.setText("");
             textview2.setText("There is no idea yet.");
+            addButton.setVisibility(View.INVISIBLE);
         } else {
             textview1.setText(text1);
             textview2.setText(text2);
+            addButton.setVisibility(View.VISIBLE);
         }
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +78,7 @@ public class FragmentPopUp extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
+        
         FragmentMainDisplay.closeLayout();
     }
 
@@ -94,6 +96,5 @@ public class FragmentPopUp extends Fragment {
             textview1.setText(text1);
             textview2.setText(text2);
         }
-
     }
 }
