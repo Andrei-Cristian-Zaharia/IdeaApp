@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ideaapp.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
@@ -50,7 +53,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -60,7 +62,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
 
-
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
 
@@ -69,8 +70,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
         Database.setActivity(this);
         Database.displayAllIdeasSorted("_nume", "ASCENDING");
-
-
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

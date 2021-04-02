@@ -83,9 +83,14 @@ public class Database {
         activity.DisplayData(names, ideas);
     }
 
-    public static void InsertIdea(String description, String idea_name, String user){
+    public static void InsertIdea(String description, String idea_name, String user, List<String> tags){
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = new Idea();
+            RealmList<String> ideaTags = idea.getTags();
+            for (String tag: tags) {
+                ideaTags.add(tag);
+            }
+
             idea.set_nume(idea_name);
             idea.set_description(description);
             idea.set_user_name(user);

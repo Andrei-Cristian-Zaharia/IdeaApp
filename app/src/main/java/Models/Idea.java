@@ -7,6 +7,9 @@ import io.realm.annotations.Required;
 
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Idea extends RealmObject {
 
     @PrimaryKey
@@ -19,7 +22,7 @@ public class Idea extends RealmObject {
     @Required
     private RealmList<String> tags;
 
-    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; tags = new RealmList<String>(); }
+    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; tags = new RealmList<String>();}
 
     // Standard getters & setters
     public ObjectId get_id() { return _id; }
