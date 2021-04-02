@@ -2,12 +2,14 @@ package Features;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -89,6 +91,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
         ChipGroup chipGroup;
         TextView nameText;
+        ImageView image;
         TextView likesText;
         View v;
 
@@ -100,6 +103,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             v = view;
             nameText = view.findViewById(R.id.nameView);
             likesText = view.findViewById(R.id.likesText);
+            image = view.findViewById(R.id.idea_image);
             chipGroup = (ChipGroup) view.findViewById(R.id.chip_group_idea);
 
             onNoteListener = _onNoteListener;

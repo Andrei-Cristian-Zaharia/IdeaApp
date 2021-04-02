@@ -83,7 +83,7 @@ public class FragmentAddIdea extends Fragment {
                     Database.InsertIdea(descriere1, nume1, returnUser(), ideaTags);
                     ideaTags.clear();
                     nume.setText("");
-                    autoCompleteTextView.setText("Tags");
+                    currentTagsNr = 0;
                     chipGroup.removeAllViews();
                     descriere.setText("");
                 }

@@ -16,6 +16,9 @@
         <item name = "android:windowCloseOnTouchOutside">true</item>
     </style>
 
-
-
+    <style name="Idea_chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">#1c1c1c</item>
+        <item name="chipCornerRadius">5dp</item>
+        <item name="android:textColor">#e8e8e8</item>
+    </style>
 </resources>
