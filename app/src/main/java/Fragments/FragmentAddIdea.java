@@ -1,9 +1,6 @@
 package Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +11,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Features.Database;
@@ -47,6 +45,7 @@ public class FragmentAddIdea extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -118,4 +117,10 @@ public class FragmentAddIdea extends Fragment {
         currentTagsNr--;
         parent.removeView(chip);
     }
+
+
+
+
+
+
 }
