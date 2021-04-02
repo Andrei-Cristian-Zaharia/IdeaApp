@@ -21,8 +21,8 @@ public class FragmentPopUp extends Fragment {
     private boolean isLiked;
     TextView textview1, textview2;
 
-    String text1 = FragmentMainDisplay.EXTRA_TEXT1;
-    String text2 = FragmentMainDisplay.EXTRA_TEXT2;
+    static String text1 = "";
+    static String text2 = "";
     ViewGroup root;
 
     public FragmentPopUp() {}
@@ -47,10 +47,7 @@ public class FragmentPopUp extends Fragment {
         textview2 = (TextView) root.findViewById(R.id.description1);
         addButton = root.findViewById(R.id.addButton);
 
-        text1 = FragmentMainDisplay.EXTRA_TEXT1;
-        text2 = FragmentMainDisplay.EXTRA_TEXT2;
-
-        if (text1.equals("com.example.ideaapp.EXTRA_TEXT1 ")) {
+        if (text1.isEmpty()) {
             textview1.setText("");
             textview2.setText("There is no idea yet.");
             addButton.setVisibility(View.INVISIBLE);
@@ -86,15 +83,14 @@ public class FragmentPopUp extends Fragment {
     public void onResume() {
         super.onResume();
 
-        text1 = FragmentMainDisplay.EXTRA_TEXT1;
-        text2 = FragmentMainDisplay.EXTRA_TEXT2;
-
-        if (text1.equals("com.example.ideaapp.EXTRA_TEXT1 ")) {
+        if (text1.isEmpty()) {
             textview1.setText("");
             textview2.setText("There is no idea yet.");
+            addButton.setVisibility(View.INVISIBLE);
         } else {
             textview1.setText(text1);
             textview2.setText(text2);
+            addButton.setVisibility(View.VISIBLE);
         }
     }
 }

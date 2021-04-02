@@ -117,7 +117,8 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
-            final int random = new Random().nextInt(idea.getTags().size());
+            //final int random = new Random().nextInt(idea.getTags().size());
+            
             chipGroup.removeAllViews();
             for (String tag: idea.getTags()) {
                 createNewChip(tag);

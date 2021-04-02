@@ -64,4 +64,16 @@ public class PageLoader extends AppCompatActivity {
     public static void ChangeCurrentItem(int position){
         viewPager2.setCurrentItem(position);
     }
+
+    @Override
+    public void onBackPressed() {
+        int count = viewPager2.getCurrentItem();
+        if (count == 1) {
+
+            super.onBackPressed();
+        } else {
+            viewPager2.setCurrentItem(1);
+            tabLayout.selectTab(tabLayout.getTabAt(1));
+        }
+    }
 }

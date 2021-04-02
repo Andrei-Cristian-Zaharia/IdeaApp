@@ -43,7 +43,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     RecyclerView recycleView;
     SwipeRefreshLayout swipeContainer;
     private List<Idea> current_ideas;
-
     static boolean isOpen;
 
     public static FragmentMainDisplay newInstance(String param1, String param2) {
@@ -107,8 +106,8 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
     void openLayoutActivity(Idea idea) {
         if (!isOpen) { isOpen = true;
-            EXTRA_TEXT1 = idea.get_nume();
-            EXTRA_TEXT2 = idea.get_description();
+            FragmentPopUp.text1 = idea.get_nume();
+            FragmentPopUp.text2 = idea.get_description();
             PageLoader.ChangeCurrentItem(2);
         }
     }
