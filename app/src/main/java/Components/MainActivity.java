@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity  {
      public void openActivity() {
         Intent intent = new Intent(this , PageLoader.class);
         startActivity(intent);
+         finish();
      }
 
      public static String returnUser(){

@@ -8,11 +8,12 @@
     app:cardCornerRadius="25dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
+
     <ImageView
         android:id="@+id/idea_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_launcher_background"/>
+        android:background="@drawable/f"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,15 +23,15 @@
 
         <TextView
             android:id="@+id/nameView"
-            android:layout_width="363dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:gravity="center"
             android:text="The name of the idea"
             android:textStyle="bold" />

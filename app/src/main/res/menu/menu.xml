@@ -7,7 +7,7 @@
         android:id="@+id/search_icon"
         android:title = "Search"
         android:icon = "@drawable/ic_baseline_search_24"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView"/>
 
 

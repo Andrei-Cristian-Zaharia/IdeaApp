@@ -19,6 +19,8 @@ import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.Random;
+
 import Models.Idea;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
@@ -115,7 +117,8 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
-
+            final int random = new Random().nextInt(idea.getTags().size());
+            chipGroup.removeAllViews();
             for (String tag: idea.getTags()) {
                 createNewChip(tag);
             }
