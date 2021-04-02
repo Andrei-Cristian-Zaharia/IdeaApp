@@ -2,6 +2,7 @@ package Features;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import Models.Idea;
 import io.realm.Case;
@@ -84,18 +87,20 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
     private class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        ChipGroup chipGroup;
         TextView nameText;
-        TextView descriptionText;
         TextView likesText;
+        View v;
 
         OnNoteListener onNoteListener;
 
         public IdeaClass(View view, OnNoteListener _onNoteListener){
             super(view);
 
+            v = view;
             nameText = view.findViewById(R.id.nameView);
-            descriptionText = view.findViewById(R.id.descriptionView);
             likesText = view.findViewById(R.id.likesText);
+            chipGroup = (ChipGroup) view.findViewById(R.id.chip_group_idea);
 
             onNoteListener = _onNoteListener;
 
@@ -106,12 +111,22 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
-            descriptionText.setText(idea.get_description());
+
+            for (String tag: idea.getTags()) {
+                createNewChip(tag);
+            }
         }
 
         @Override
         public void onClick(View v) {
             onNoteListener.onNoteClick(getAdapterPosition());
+        }
+
+        void createNewChip(String text){
+            Chip mChip = (Chip) LayoutInflater.from(v.getContext()).inflate(R.layout.layout_chip_idea, this.chipGroup, false);
+            mChip.setCheckable(false);
+            mChip.setText(text);
+            this.chipGroup.addView(mChip);
         }
     }
 
