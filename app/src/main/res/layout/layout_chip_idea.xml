@@ -5,6 +5,6 @@
     android:theme="@style/Theme.MaterialComponents.Light"
     android:clickable="false"
     android:layout_width="wrap_content"
-    android:alpha="0.6"
+    android:alpha="0.8"
     app:chipSurfaceColor="@android:color/transparent"
     android:layout_height="wrap_content" />
