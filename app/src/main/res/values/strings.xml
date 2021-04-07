@@ -6,11 +6,10 @@
     <string-array name="tags">
         <item>Android</item>
         <item>Health</item>
-        <item>Application</item>
+        <item>Mobile Application</item>
         <item>Circuit</item>
         <item>Food</item>
-        <item>Sport</item>
-        <item>Arduino</item>
         <item>Gifts</item>
+        <item>Sport</item>
     </string-array>
 </resources>
