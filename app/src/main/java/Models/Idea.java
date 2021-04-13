@@ -1,9 +1,14 @@
 package Models;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 import org.bson.types.ObjectId;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Idea extends RealmObject {
 
@@ -14,8 +19,10 @@ public class Idea extends RealmObject {
     private Integer _likes;
     private String _nume;
     private String _user_name;
+    @Required
+    private RealmList<String> tags;
 
-    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; }
+    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; tags = new RealmList<String>();}
 
     // Standard getters & setters
     public ObjectId get_id() { return _id; }
@@ -27,4 +34,6 @@ public class Idea extends RealmObject {
     public void set_nume(String _nume) { this._nume = _nume; }
     public String get_user_name() { return _user_name; }
     public void set_user_name(String _user_name) { this._user_name = _user_name; }
+    public RealmList<String> getTags() { return tags; }
+    public void setTags(RealmList<String> tags) { this.tags = tags; }
 }

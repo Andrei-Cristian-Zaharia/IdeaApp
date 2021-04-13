@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.IdeaApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.IdeaApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#bbbfca</item>
         <item name="colorPrimaryVariant">@color/black</item>
@@ -15,11 +15,10 @@
         <item name = "android:windowIsTranslucent">true</item>
         <item name = "android:windowCloseOnTouchOutside">true</item>
     </style>
-    <style name="Theme.IdeaApp1" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#f4f4f2</item>
-        <item name = "android:windowIsTranslucent">true</item>
-        <item name = "android:windowCloseOnTouchOutside">true</item>
-    </style>
 
-    <style name="Theme"></style>
+    <style name="Idea_chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">#1c1c1c</item>
+        <item name="chipCornerRadius">5dp</item>
+        <item name="android:textColor">#e8e8e8</item>
+    </style>
 </resources>

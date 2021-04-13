@@ -16,6 +16,8 @@ import com.example.ideaapp.R;
 
 import java.util.List;
 
+import javax.security.auth.Destroyable;
+
 import Features.Database;
 import Models.UserModel;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity  {
     Button button;
     String usernamee ;
     TextView errorT ;
+    Database db;
 
     public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
@@ -37,11 +40,11 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
 
         LoadData();
-        Database db = new Database(this);
+
+        db = new Database(this);
 
         if(text.isEmpty()){
             setContentView(R.layout.activity_main);
-
             username = (EditText) findViewById(R.id.username) ;
             button = (Button)   findViewById(R.id.button);
             errorT = (TextView) findViewById(R.id.error);
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity  {
      public void openActivity() {
         Intent intent = new Intent(this , PageLoader.class);
         startActivity(intent);
+        finish();
      }
 
      public static String returnUser(){

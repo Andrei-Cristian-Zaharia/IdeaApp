@@ -15,7 +15,7 @@ import Features.FragmentAdapter;
 public class PageLoader extends AppCompatActivity {
 
     TabLayout tabLayout;
-    ViewPager2 viewPager2;
+    static ViewPager2 viewPager2;
     FragmentAdapter adapter;
 
     @Override
@@ -29,10 +29,12 @@ public class PageLoader extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         adapter = new FragmentAdapter(fm, getLifecycle());
         viewPager2.setAdapter(adapter);
-        viewPager2.setCurrentItem(1);
 
         tabLayout.addTab(tabLayout.newTab().setText("Add new idea"));
         tabLayout.addTab(tabLayout.newTab().setText("Main display"));
+        tabLayout.addTab(tabLayout.newTab().setText("Idea"));
+        viewPager2.setCurrentItem(1);
+        tabLayout.selectTab(tabLayout.getTabAt(1));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -57,5 +59,21 @@ public class PageLoader extends AppCompatActivity {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+    }
+
+    public static void ChangeCurrentItem(int position){
+        viewPager2.setCurrentItem(position);
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = viewPager2.getCurrentItem();
+        if (count == 1) {
+
+            super.onBackPressed();
+        } else {
+            viewPager2.setCurrentItem(1);
+            tabLayout.selectTab(tabLayout.getTabAt(1));
+        }
     }
 }

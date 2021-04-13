@@ -1,41 +1,48 @@
 package Fragments;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
 
-import androidx.appcompat.widget.SearchView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import com.example.ideaapp.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
-import Components.pop_up_layout;
+import Components.PageLoader;
 import Features.Database;
 import Features.Idea_Adapter;
 import Models.Idea;
 import Utilities.SpacingItemDecorator;
 import io.realm.OrderedRealmCollection;
 
-public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNoteListener{
+public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNoteListener {
 
-    public static final String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
-    public static final String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
-    androidx.appcompat.widget.SearchView searchView;
-    FloatingActionButton addIdeaButton;
+    public static String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
+    public static String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
+
     Idea_Adapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recycleView;
     SwipeRefreshLayout swipeContainer;
     private List<Idea> current_ideas;
-
     static boolean isOpen;
 
     public static FragmentMainDisplay newInstance(String param1, String param2) {
@@ -43,7 +50,8 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         return fragment;
     }
 
-    public FragmentMainDisplay() {}
+    public FragmentMainDisplay() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +61,10 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
 
-        searchView = (androidx.appcompat.widget.SearchView) root.findViewById(R.id.searchBar);
-        addIdeaButton = (FloatingActionButton) root.findViewById(R.id.addButton);
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
 
@@ -66,20 +73,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
         Database.setActivity(this);
         Database.displayAllIdeasSorted("_nume", "ASCENDING");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                FragmentMainDisplay.this.adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                FragmentMainDisplay.this.adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -113,12 +106,56 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
     void openLayoutActivity(Idea idea) {
         if (!isOpen) { isOpen = true;
-            Intent intent = new Intent(this.getContext(), pop_up_layout.class);
-            intent.putExtra(EXTRA_TEXT1, idea.get_nume());
-            intent.putExtra(EXTRA_TEXT2, idea.get_description());
-            startActivity(intent);
+            FragmentPopUp.text1 = idea.get_nume();
+            FragmentPopUp.text2 = idea.get_description();
+            PageLoader.ChangeCurrentItem(2);
         }
     }
 
-    public static void closeLayout() { isOpen = false; }
+    public static void closeLayout(){ isOpen = false; }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here!");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                FragmentMainDisplay.this.adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                FragmentMainDisplay.this.adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+
+                return true;
+            case R.id.item2:
+
+                return true;
+            case R.id.item3:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }

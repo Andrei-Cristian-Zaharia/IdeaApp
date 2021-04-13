@@ -2,12 +2,18 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="180dp"
     android:padding="25dp"
-    app:cardBackgroundColor="#bbbfca"
+    android:background="@drawable/ic_launcher_background"
     app:cardCornerRadius="25dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
+
+    <ImageView
+        android:id="@+id/idea_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/a"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,35 +23,27 @@
 
         <TextView
             android:id="@+id/nameView"
-            android:layout_width="363dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeMinTextSize="15sp"
+            android:textSize="16dp"
             android:gravity="center"
             android:text="The name of the idea"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/descriptionView"
-            android:layout_width="363dp"
-            android:layout_height="102dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="Description"
-            android:textSize="17sp"
-            android:ellipsize="end"
-            android:maxLines="5"
-            android:textStyle="normal" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_idea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:chipSpacingHorizontal="10dp"
+            android:padding="10dp"
+            android:layout_below="@+id/nameView"/>
 
         <FrameLayout
             android:layout_width="360dp"
