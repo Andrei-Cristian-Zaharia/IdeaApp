@@ -127,6 +127,23 @@ public class Database {
         return results;
     }
 
+    public static void updateTextTag(){
+        uiThreadRealm.executeTransaction(r-> {
+            List<Idea> ideas = getAllIdeas();
+
+            for (Idea idea : ideas) {
+                String text = "";
+                for (String tag: idea.getTags()) {
+                    text += tag.toString();
+                }
+
+                idea.setTags_string(text);
+            }
+
+            r.insertOrUpdate(ideas);
+        });
+    }
+
     public static List<Idea> getAllIdeasSortBy(String type, String comparator) {
         List<Idea> results;
 

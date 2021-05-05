@@ -19,10 +19,12 @@ public class Idea extends RealmObject {
     private Integer _likes;
     private String _nume;
     private String _user_name;
+
     @Required
     private RealmList<String> tags;
+    private String tags_string;
 
-    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; tags = new RealmList<String>();}
+    public Idea() { _id = new ObjectId(); _likes = 0; partition_id = "IdeaApp"; tags = new RealmList<String>(); tags_string = ""; }
 
     // Standard getters & setters
     public ObjectId get_id() { return _id; }
@@ -36,4 +38,6 @@ public class Idea extends RealmObject {
     public void set_user_name(String _user_name) { this._user_name = _user_name; }
     public RealmList<String> getTags() { return tags; }
     public void setTags(RealmList<String> tags) { this.tags = tags; }
+    public String getTags_string() { return tags_string; }
+    public void setTags_string(String tags_string) { this.tags_string = tags_string; }
 }

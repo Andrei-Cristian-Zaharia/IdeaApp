@@ -48,6 +48,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     FloatingActionButton addIdeaButton;
     private List<Idea> current_ideas;
     static boolean isOpen;
+    String[] tags;
     ViewGroup root;
 
     public static FragmentMainDisplay newInstance(String param1, String param2) {
@@ -69,6 +70,8 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         setHasOptionsMenu(true);
 
         root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
+
+        tags = getResources().getStringArray(R.array.tags);
 
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
@@ -99,6 +102,8 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
     public void DisplayData(String[] names, List<Idea> _ideas) {
         current_ideas = _ideas;
+
+        //Database.updateTextTag();
 
         adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
         mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
