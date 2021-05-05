@@ -2,6 +2,7 @@ package Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +24,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import Components.AddIdea;
 import Components.PageLoader;
 import Features.Database;
 import Features.Idea_Adapter;
@@ -42,6 +45,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recycleView;
     SwipeRefreshLayout swipeContainer;
+    FloatingActionButton addIdeaButton;
     private List<Idea> current_ideas;
     static boolean isOpen;
 
@@ -67,6 +71,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
+        addIdeaButton = (FloatingActionButton) root.findViewById(R.id.open_new_idea);
 
         SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
         recycleView.addItemDecoration(spacingItemDecorator);
@@ -78,6 +83,13 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
             @Override
             public void onRefresh() {
                 fetchTimelineAsync();
+            }
+        });
+
+        addIdeaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity();
             }
         });
 
@@ -137,6 +149,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         });
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -152,6 +165,11 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void openActivity() {
+        Intent intent = new Intent(getActivity(), AddIdea.class);
+        startActivity(intent);
     }
 
     public static void hideKeyboardFrom(Context context, View view) {

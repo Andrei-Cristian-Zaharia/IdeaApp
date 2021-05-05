@@ -30,11 +30,8 @@ public class PageLoader extends AppCompatActivity {
         adapter = new FragmentAdapter(fm, getLifecycle());
         viewPager2.setAdapter(adapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Add new idea"));
         tabLayout.addTab(tabLayout.newTab().setText("Main display"));
         tabLayout.addTab(tabLayout.newTab().setText("Idea"));
-        viewPager2.setCurrentItem(1);
-        tabLayout.selectTab(tabLayout.getTabAt(1));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
