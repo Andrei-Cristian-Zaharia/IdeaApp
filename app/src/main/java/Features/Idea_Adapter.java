@@ -2,24 +2,24 @@ package Features;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
-import android.util.Log;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
-import java.util.Random;
 
 import Models.Idea;
 import io.realm.Case;
@@ -28,14 +28,22 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 
+enum Direction { DOWN, UP }
+
 public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
     Realm realm;
+    Direction direction;
     private OnNoteListener mOnNoteListener;
+    Context context;
+    NestedScrollView nestedScrollView;
+    RecyclerView recyclerView;
 
-    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener){
+    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener, RecyclerView v){
         super(data, true, true);
         mOnNoteListener = _onNoteListener;
+        context = c;
+        recyclerView = v;
         this.realm = realm;
     }
 
@@ -47,9 +55,26 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         return holder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Idea idea = getData().get(position);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    direction = Direction.DOWN;
+                } else if (dy < 0) {
+                    direction = Direction.UP;
+                }
+            }
+        });
+
+        if (direction == Direction.DOWN)
+            holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_up));
+        else
+             holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_down));
 
         IdeaClass mHolder = (IdeaClass) holder;
         mHolder.bind(idea);
@@ -58,9 +83,12 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     public void filterResults(String text) {
         text = text == null ? null : text.toLowerCase().trim();
         RealmQuery<Idea> query = realm.where(Idea.class);
-        if(!(text == null || "".equals(text))) {
+
+        if(!(text == null || "".equals(text)))
             query.contains("_nume", text, Case.INSENSITIVE);
-        }
+
+        //query.in("tags", new String[]{"Gifts"}, Case.INSENSITIVE);
+
         updateData(query.findAllAsync());
     }
 

@@ -48,6 +48,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     FloatingActionButton addIdeaButton;
     private List<Idea> current_ideas;
     static boolean isOpen;
+    ViewGroup root;
 
     public static FragmentMainDisplay newInstance(String param1, String param2) {
         FragmentMainDisplay fragment = new FragmentMainDisplay();
@@ -67,7 +68,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
 
         recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
@@ -99,7 +100,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     public void DisplayData(String[] names, List<Idea> _ideas) {
         current_ideas = _ideas;
 
-        adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this);
+        adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
         mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
 
         recycleView.setLayoutManager(mLayoutManager);
@@ -170,10 +171,5 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     public void openActivity() {
         Intent intent = new Intent(getActivity(), AddIdea.class);
         startActivity(intent);
-    }
-
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
