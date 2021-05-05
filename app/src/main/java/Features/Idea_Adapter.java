@@ -25,6 +25,7 @@ import Models.Idea;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 
@@ -83,11 +84,12 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     public void filterResults(String text) {
         text = text == null ? null : text.toLowerCase().trim();
         RealmQuery<Idea> query = realm.where(Idea.class);
+        RealmList<Idea> result = new RealmList<>();
 
         if(!(text == null || "".equals(text)))
             query.contains("_nume", text, Case.INSENSITIVE);
 
-        //query.in("tags", new String[]{"Gifts"}, Case.INSENSITIVE);
+        query.in("tags_string", new String[]{"Gifts"}, Case.INSENSITIVE);
 
         updateData(query.findAllAsync());
     }
@@ -146,7 +148,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
             //final int random = new Random().nextInt(idea.getTags().size());
-            
+
             chipGroup.removeAllViews();
             for (String tag: idea.getTags()) {
                 createNewChip(tag);
