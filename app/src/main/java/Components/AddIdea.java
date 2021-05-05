@@ -1,13 +1,13 @@
-package Fragments;
+package Components;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -19,14 +19,14 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Features.Database;
 
 import static Components.MainActivity.returnUser;
 
-public class FragmentAddIdea extends Fragment {
+public class AddIdea extends AppCompatActivity {
+
     EditText nume, descriere;
     String nume1, descriere1;
     AutoCompleteTextView autoCompleteTextView;
@@ -36,33 +36,19 @@ public class FragmentAddIdea extends Fragment {
     Button button;
     private int currentTagsNr = 0;
 
-    public FragmentAddIdea() {
-    }
-
-    public static FragmentAddIdea newInstance(String param1, String param2) {
-        FragmentAddIdea fragment = new FragmentAddIdea();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
+        setContentView(R.layout.add_idea);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_add_idea, null);
-
-        chipGroup = (ChipGroup) root.findViewById(R.id.chip_group);
-        nume = (EditText) root.findViewById(R.id.nameViewscris);
-        descriere = (EditText) root.findViewById(R.id.description1);
-        button = (Button) root.findViewById(R.id.button);
-        autoCompleteTextView = (AutoCompleteTextView) root.findViewById(R.id.autoComplete);
+        chipGroup = (ChipGroup) findViewById(R.id.chip_group);
+        nume = (EditText) findViewById(R.id.nameViewscris);
+        descriere = (EditText) findViewById(R.id.description1);
+        button = (Button) findViewById(R.id.button);
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
 
         tags = getResources().getStringArray(R.array.tags);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(requireContext(), R.layout.dropdown_item, tags);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.dropdown_item, tags);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,26 +64,27 @@ public class FragmentAddIdea extends Fragment {
             public void onClick(View view) {
                 nume1 = nume.getText().toString();
                 descriere1 = descriere.getText().toString();
-                if (nume1.length() > 3 && descriere1.length() > 10)
-                {
+                if (nume1.length() > 3 && descriere1.length() > 10) {
                     Database.InsertIdea(descriere1, nume1, returnUser(), ideaTags);
                     ideaTags.clear();
                     nume.setText("");
                     currentTagsNr = 0;
                     chipGroup.removeAllViews();
                     descriere.setText("");
+                    finish();
                 }
             }
         });
-
-        return root;
     }
 
-    void createNewChip(String text){
+    void createNewChip(String text) {
         if (currentTagsNr == 3) return;
-        currentTagsNr++;
 
-        Chip mChip = (Chip) LayoutInflater.from(this.getContext()).inflate(R.layout.layout_chip_entry, this.chipGroup, false);
+        for (String textTag : ideaTags)
+            if (textTag.contentEquals(text)) return;
+
+        currentTagsNr++;
+        Chip mChip = (Chip) LayoutInflater.from(this).inflate(R.layout.layout_chip_entry, this.chipGroup, false);
         mChip.setCheckable(false);
         mChip.setText(text);
         ideaTags.add(text);
@@ -110,7 +97,7 @@ public class FragmentAddIdea extends Fragment {
             }
         });
 
-        Log.v("Tag: " , text + " created !");
+        Log.v("Tag: ", text + " created !");
     }
 
     private void handleChipCloseIconClicked(Chip chip) {

@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import Fragments.FragmentAddIdea;
 import Fragments.FragmentMainDisplay;
 import Fragments.FragmentPopUp;
 
@@ -22,15 +21,13 @@ public class FragmentAdapter extends FragmentStateAdapter {
         switch (position)
         {
             case 1 :
-                return new FragmentMainDisplay();
-            case 2 :
                 return new FragmentPopUp();
         }
-        return new FragmentAddIdea();
+        return new FragmentMainDisplay();
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }
