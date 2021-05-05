@@ -32,6 +32,7 @@ public class PageLoader extends AppCompatActivity {
 
         tabLayout.addTab(tabLayout.newTab().setText("Main display"));
         tabLayout.addTab(tabLayout.newTab().setText("Idea"));
+        tabLayout.addTab(tabLayout.newTab().setText("Profile"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -65,12 +66,11 @@ public class PageLoader extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         int count = viewPager2.getCurrentItem();
-        if (count == 1) {
-
+        if (count == 0) {
             super.onBackPressed();
         } else {
-            viewPager2.setCurrentItem(1);
-            tabLayout.selectTab(tabLayout.getTabAt(1));
+            viewPager2.setCurrentItem(0);
+            tabLayout.selectTab(tabLayout.getTabAt(0));
         }
     }
 }

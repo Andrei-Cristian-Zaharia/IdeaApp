@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import Fragments.FragmentAccount;
 import Fragments.FragmentMainDisplay;
 import Fragments.FragmentPopUp;
 
@@ -22,12 +23,14 @@ public class FragmentAdapter extends FragmentStateAdapter {
         {
             case 1 :
                 return new FragmentPopUp();
+            case 2 :
+                return new FragmentAccount();
         }
         return new FragmentMainDisplay();
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }
