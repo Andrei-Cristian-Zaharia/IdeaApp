@@ -16,7 +16,16 @@
             android:layout_height="match_parent"
             android:layout_marginTop="60dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:paddingRight="10dp"
+        />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_nested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
