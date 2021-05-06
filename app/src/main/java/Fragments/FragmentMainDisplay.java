@@ -107,7 +107,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     public void DisplayData(String[] names, List<Idea> _ideas) {
         current_ideas = _ideas;
 
-        //Database.updateTextTag();
+        //Database.updateUsers();
 
         adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
         mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);

@@ -19,7 +19,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
 
 public class Database {
 
-    static Realm uiThreadRealm;
+    static public Realm uiThreadRealm;
     static FragmentMainDisplay activity;
 
     public Database(Context context) {
@@ -115,6 +115,12 @@ public class Database {
         });
     }
 
+    public static UserModel getUser(String name){
+        UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+
+        return user;
+    }
+
     public static List<UserModel> getAllUsers() {
         List<UserModel> results = uiThreadRealm.where(UserModel.class).findAll();
 
@@ -141,6 +147,18 @@ public class Database {
             }
 
             r.insertOrUpdate(ideas);
+        });
+    }
+
+    public static void updateUsers(){
+        uiThreadRealm.executeTransaction(r ->{
+            List<UserModel> users = getAllUsers();
+
+            for (UserModel user: users) {
+                user.setPhone_nr("");
+                user.setEmail_address("");
+                user.setShare_info(false);
+            }
         });
     }
 
