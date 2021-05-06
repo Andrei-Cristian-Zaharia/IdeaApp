@@ -5,6 +5,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="Fragments.FragmentMainDisplay">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/whitespot_1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
+        <View
+            android:id="@+id/wave_1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/whitespot_1"
+            android:background="@drawable/ic_wave__2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/wave_1"
+            android:background="@color/backgroundColor"/>
+    </RelativeLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:id="@+id/swipeContainer"

@@ -73,9 +73,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
         tags = getResources().getStringArray(R.array.tags);
 
-        recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
-        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
-        addIdeaButton = (FloatingActionButton) root.findViewById(R.id.open_new_idea);
+        setViews();
 
         SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
         recycleView.addItemDecoration(spacingItemDecorator);
@@ -98,6 +96,12 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         });
 
         return root;
+    }
+
+    private void setViews(){
+        recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
+        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
+        addIdeaButton = (FloatingActionButton) root.findViewById(R.id.open_new_idea);
     }
 
     public void DisplayData(String[] names, List<Idea> _ideas) {
