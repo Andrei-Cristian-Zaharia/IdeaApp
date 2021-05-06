@@ -173,6 +173,8 @@ public class Database {
         return results;
     }
 
+
+
     public static List<Idea> getIdeasOf(String user) {
         List<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
 
