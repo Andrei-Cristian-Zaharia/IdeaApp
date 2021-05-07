@@ -1,17 +1,13 @@
 package Fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.inputmethodservice.Keyboard;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ideaapp.R;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import Components.AddIdea;
 import Components.PageLoader;
 import Features.Database;
 import Features.Idea_Adapter;
@@ -35,20 +31,15 @@ import io.realm.OrderedRealmCollection;
 
 public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNoteListener {
 
-    public static String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
-    public static String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
-
-    Idea_Adapter adapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    RecyclerView recycleView;
-    SwipeRefreshLayout swipeContainer;
     private List<Idea> current_ideas;
     static boolean isOpen;
 
-    public static FragmentMainDisplay newInstance(String param1, String param2) {
-        FragmentMainDisplay fragment = new FragmentMainDisplay();
-        return fragment;
-    }
+    private RecyclerView recycleView;
+    private SwipeRefreshLayout swipeContainer;
+    private FloatingActionButton addIdeaButton;
+    private ViewGroup root;
+
+    private Idea_Adapter adapter;
 
     public FragmentMainDisplay() {
     }
@@ -63,10 +54,9 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
 
-        recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
-        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
+        setViews();
 
         SpacingItemDecorator spacingItemDecorator = new SpacingItemDecorator(20);
         recycleView.addItemDecoration(spacingItemDecorator);
@@ -81,14 +71,27 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
             }
         });
 
+        addIdeaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity();
+            }
+        });
+
         return root;
     }
 
-    public void DisplayData(String[] names, List<Idea> _ideas) {
+    private void setViews(){
+        recycleView = (RecyclerView) root.findViewById(R.id.recycleView);
+        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
+        addIdeaButton = (FloatingActionButton) root.findViewById(R.id.open_new_idea);
+    }
+
+    public void displayData(List<Idea> _ideas) {
         current_ideas = _ideas;
 
-        adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this);
-        mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
+        adapter = new Idea_Adapter(this.getContext(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
 
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(adapter);
@@ -108,7 +111,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         if (!isOpen) { isOpen = true;
             FragmentPopUp.text1 = idea.get_nume();
             FragmentPopUp.text2 = idea.get_description();
-            PageLoader.ChangeCurrentItem(2);
+            PageLoader.ChangeCurrentItem(1);
         }
     }
 
@@ -137,6 +140,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         });
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -149,13 +153,31 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
             case R.id.item3:
 
                 return true;
+
+            case R.id.sort_alphabetic_down:
+                Database.displayAllIdeasSorted("_nume", "DESCENDING");
+                return true;
+
+            case R.id.sort_least_liked_up_down:
+                Database.displayAllIdeasSorted("_likes", "ASCENDING");
+
+                return true;
+
+            case R.id.sort_alphabetic_up:
+                Database.displayAllIdeasSorted("_nume", "ASCENDING");
+                return true;
+
+            case R.id.sort_most_liked_up:
+                Database.displayAllIdeasSorted("_likes", "DESCENDING");
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    public void openActivity() {
+        Intent intent = new Intent(getActivity(), AddIdea.class);
+        startActivity(intent);
     }
 }

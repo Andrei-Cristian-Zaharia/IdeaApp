@@ -5,6 +5,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="Fragments.FragmentMainDisplay">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/whitespot_1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
+        <View
+            android:id="@+id/wave_1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/whitespot_1"
+            android:background="@drawable/ic_wave__2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/wave_1"
+            android:background="@color/backgroundColor"/>
+    </RelativeLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:id="@+id/swipeContainer"
@@ -16,6 +39,23 @@
             android:layout_height="match_parent"
             android:layout_marginTop="60dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:paddingRight="10dp"
+        />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_nested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/open_new_idea"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"/>
 </FrameLayout>

@@ -16,23 +16,21 @@ import com.example.ideaapp.R;
 
 import java.util.List;
 
-import javax.security.auth.Destroyable;
-
 import Features.Database;
 import Models.UserModel;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
-    EditText username;
-    Button button;
-    String usernamee ;
-    TextView errorT ;
-    Database db;
+    private EditText username;
+    private Button button;
+    private String usernamee;
+    private TextView errorT;
+    private Database db;
+
+    private static String text;
 
     public static final String SHARED_PREFS = " sharedPrefs";
     public static final String TEXT = "text ";
-
-    public static String text;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -43,11 +41,10 @@ public class MainActivity extends AppCompatActivity  {
 
         db = new Database(this);
 
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             setContentView(R.layout.activity_main);
-            username = (EditText) findViewById(R.id.username) ;
-            button = (Button)   findViewById(R.id.button);
-            errorT = (TextView) findViewById(R.id.error);
+
+            setViews();
 
             button.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
@@ -64,49 +61,53 @@ public class MainActivity extends AppCompatActivity  {
                                 canSave = false;
 
                         if (canSave) {
-                             Database.InsertUser(username.getText().toString());
-                             SaveData();
+                            Database.InsertUser(username.getText().toString());
+                            SaveData();
 
-                             openActivity();
+                            openActivity();
                         } else errorT.setText("User already exist !");
                     }
                 }
             });
-        }
-        else
+        } else
             openActivity();
-     }
+    }
 
-  void SaveData ()  {
-         usernamee =  username.getText().toString();
-         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS , MODE_PRIVATE);
-         SharedPreferences.Editor editor = sharedPreferences.edit();
+    void setViews() {
+        username = (EditText) findViewById(R.id.username);
+        button = (Button) findViewById(R.id.button);
+        errorT = (TextView) findViewById(R.id.error);
+    }
 
-         editor.putString(TEXT,username.getText().toString());
+    void SaveData() {
+        usernamee = username.getText().toString();
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-         text = sharedPreferences.getString(TEXT , " ");
-         editor.apply();
+        editor.putString(TEXT, username.getText().toString());
 
+        text = sharedPreferences.getString(TEXT, " ");
+        editor.apply();
 
-         username.setText(text);
+        username.setText(text);
 
-        Toast.makeText(this, "Data saved",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
 
         LoadData();
-     }
+    }
 
-     void LoadData () {
-         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-         text = sharedPreferences.getString(TEXT, "");
-     }
+    void LoadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        text = sharedPreferences.getString(TEXT, "");
+    }
 
-     public void openActivity() {
-        Intent intent = new Intent(this , PageLoader.class);
+    public void openActivity() {
+        Intent intent = new Intent(this, PageLoader.class);
         startActivity(intent);
         finish();
-     }
+    }
 
-     public static String returnUser(){
+    public static String returnUser() {
         return text;
-     }
+    }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ideaapp.R;
@@ -14,9 +13,10 @@ import Features.FragmentAdapter;
 
 public class PageLoader extends AppCompatActivity {
 
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
+    private FragmentAdapter adapter;
+
     static ViewPager2 viewPager2;
-    FragmentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +30,9 @@ public class PageLoader extends AppCompatActivity {
         adapter = new FragmentAdapter(fm, getLifecycle());
         viewPager2.setAdapter(adapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Add new idea"));
         tabLayout.addTab(tabLayout.newTab().setText("Main display"));
         tabLayout.addTab(tabLayout.newTab().setText("Idea"));
-        viewPager2.setCurrentItem(1);
-        tabLayout.selectTab(tabLayout.getTabAt(1));
+        tabLayout.addTab(tabLayout.newTab().setText("Profile"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -68,12 +66,11 @@ public class PageLoader extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         int count = viewPager2.getCurrentItem();
-        if (count == 1) {
-
+        if (count == 0) {
             super.onBackPressed();
         } else {
-            viewPager2.setCurrentItem(1);
-            tabLayout.selectTab(tabLayout.getTabAt(1));
+            viewPager2.setCurrentItem(0);
+            tabLayout.selectTab(tabLayout.getTabAt(0));
         }
     }
 }

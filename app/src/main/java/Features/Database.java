@@ -19,7 +19,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
 
 public class Database {
 
-    static Realm uiThreadRealm;
+    static public Realm uiThreadRealm;
     static FragmentMainDisplay activity;
 
     public Database(Context context) {
@@ -48,48 +48,6 @@ public class Database {
         return uiThreadRealm;
     }
 
-    public static void displayIdeasOf(String user) {
-        List<Idea> ideas = getIdeasOf(user);
-
-        String[] names = new String[ideas.size()];
-        String[] descriptions = new String[ideas.size()];
-
-        for (int i = 0; i < ideas.size(); i++) {
-            names[i] = ideas.get(i).get_nume();
-            descriptions[i] = ideas.get(i).get_description();
-        }
-
-        activity.DisplayData(names, ideas);
-    }
-
-    public static void displayAllIdeasSorted(String type, String comparator) { //ASCENDING, DESCENDING
-        List<Idea> ideas = getAllIdeasSortBy(type, comparator);
-
-        String[] names = new String[ideas.size()];
-        String[] descriptions = new String[ideas.size()];
-
-        for (int i = 0; i < ideas.size(); i++) {
-            names[i] = ideas.get(i).get_nume();
-            descriptions[i] = ideas.get(i).get_description();
-        }
-
-        activity.DisplayData(names, ideas);
-    }
-
-    public static void displayAllIdeas() {
-        List<Idea> ideas = getAllIdeas();
-
-        String[] names = new String[ideas.size()];
-        String[] descriptions = new String[ideas.size()];
-
-        for (int i = 0; i < ideas.size(); i++) {
-            names[i] = ideas.get(i).get_nume();
-            descriptions[i] = ideas.get(i).get_description();
-        }
-
-        activity.DisplayData(names, ideas);
-    }
-
     public static void InsertIdea(String description, String idea_name, String user, List<String> tags) {
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = new Idea();
@@ -115,19 +73,12 @@ public class Database {
         });
     }
 
-    public static List<UserModel> getAllUsers() {
-        List<UserModel> results = uiThreadRealm.where(UserModel.class).findAll();
+    public static void displayAllIdeasSorted(String type, String comparator) { //ASCENDING, DESCENDING
 
-        return results;
+        activity.displayData(getAllIdeasSortBy(type, comparator));
     }
 
-    public static List<Idea> getAllIdeas() {
-        List<Idea> results = uiThreadRealm.where(Idea.class).findAll();
-
-        return results;
-    }
-
-    public static List<Idea> getAllIdeasSortBy(String type, String comparator) {
+    private static List<Idea> getAllIdeasSortBy(String type, String comparator) {
         List<Idea> results;
 
         if (comparator.equals("ASCENDING"))
@@ -138,14 +89,34 @@ public class Database {
         return results;
     }
 
-    public static List<Idea> getIdeasOf(String user) {
-        List<Idea> results = uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
+    public static void displayAllIdeas() {
 
-        return results;
+        activity.displayData(getAllIdeas());
+    }
+
+    public static UserModel getUser(String name){
+
+        return uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+    }
+
+    public static List<UserModel> getAllUsers() {
+
+        return uiThreadRealm.where(UserModel.class).findAll();
+    }
+
+    public static List<Idea> getAllIdeas() {
+
+        return uiThreadRealm.where(Idea.class).findAll();
+    }
+
+    public static List<Idea> getIdeasOf(String user) {
+
+        return uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
     }
 
     public static void giveLike(String ideaName) {
-        String name = MainActivity.text;
+        String name = MainActivity.returnUser();
+
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
             idea.set_likes(idea.get_likes() + 1);
@@ -159,7 +130,8 @@ public class Database {
     }
 
     public static void removeLike(String ideaName) {
-        String name = MainActivity.text;
+        String name = MainActivity.returnUser();
+
         uiThreadRealm.executeTransaction(r -> {
             Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
             idea.set_likes(idea.get_likes() - 1);
@@ -174,7 +146,8 @@ public class Database {
     }
 
     public static boolean isIdeaLiked(String ideaName) {
-        String name = MainActivity.text;
+        String name = MainActivity.returnUser();
+
         UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
 
         RealmList<String> ideas = user.getLiked_ideas();

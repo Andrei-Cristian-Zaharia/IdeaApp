@@ -2,11 +2,10 @@ package Features;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -19,31 +18,37 @@ import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
-import java.util.Random;
-
 import Models.Idea;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
-import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 
+enum Direction { DOWN, UP }
+
 public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
-    Realm realm;
-    private OnNoteListener mOnNoteListener;
+    private final OnNoteListener mOnNoteListener;
+    private Direction direction;
 
-    public Idea_Adapter(Context c, Realm realm, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener){
+    private final RecyclerView recyclerView;
+    private final Context context;
+
+    public Idea_Adapter(Context c, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener, RecyclerView v){
         super(data, true, true);
+
         mOnNoteListener = _onNoteListener;
-        this.realm = realm;
+        context = c;
+        recyclerView = v;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
         IdeaClass holder = new IdeaClass(view, mOnNoteListener);
+
         return holder;
     }
 
@@ -51,26 +56,45 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Idea idea = getData().get(position);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    direction = Direction.DOWN;
+                } else if (dy < 0) {
+                    direction = Direction.UP;
+                }
+            }
+        });
+
+        if (direction == Direction.DOWN)
+            holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_up));
+        else
+             holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_down));
+
         IdeaClass mHolder = (IdeaClass) holder;
+
         mHolder.bind(idea);
     }
 
-    public void filterResults(String text) {
+    public void filterResults(String text) { // TO BE CONTINUE
         text = text == null ? null : text.toLowerCase().trim();
-        RealmQuery<Idea> query = realm.where(Idea.class);
-        if(!(text == null || "".equals(text))) {
+        RealmQuery<Idea> query = Database.getRealm().where(Idea.class);
+
+        if(!(text == null || "".equals(text)))
             query.contains("_nume", text, Case.INSENSITIVE);
-        }
+
+        query.in("tags_string", new String[]{"Gifts"}, Case.INSENSITIVE);
+
         updateData(query.findAllAsync());
     }
 
     @Override
     public Filter getFilter() {
-        IdeaFilter filter = new IdeaFilter(this);
-        return filter;
+        return new IdeaFilter(this);
     }
 
-    private class IdeaFilter extends Filter{
+    private static class IdeaFilter extends Filter{
         private final Idea_Adapter adapter;
 
         private IdeaFilter(Idea_Adapter adapter) {
@@ -89,15 +113,14 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         }
     }
 
-    private class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private static class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ChipGroup chipGroup;
-        TextView nameText;
-        ImageView image;
-        TextView likesText;
-        View v;
+        private final ChipGroup chipGroup;
+        private final TextView nameText, likesText;
+        private final ImageView image;
+        private final View v;
 
-        OnNoteListener onNoteListener;
+        private final OnNoteListener onNoteListener;
 
         public IdeaClass(View view, OnNoteListener _onNoteListener){
             super(view);
@@ -117,8 +140,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
-            //final int random = new Random().nextInt(idea.getTags().size());
-            
+
             chipGroup.removeAllViews();
             for (String tag: idea.getTags()) {
                 createNewChip(tag);

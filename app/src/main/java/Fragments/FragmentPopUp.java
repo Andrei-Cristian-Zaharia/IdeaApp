@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,20 +16,15 @@ import Features.Database;
 
 public class FragmentPopUp extends Fragment {
 
-    FloatingActionButton addButton;
+    private FloatingActionButton addButton;
     private boolean isLiked;
-    TextView textview1, textview2;
+    private TextView textview1, textview2;
+    private ViewGroup root;
 
     static String text1 = "";
     static String text2 = "";
-    ViewGroup root;
 
     public FragmentPopUp() {}
-
-    public static FragmentPopUp newInstance(String param1, String param2) {
-        FragmentPopUp fragment = new FragmentPopUp();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,19 +37,8 @@ public class FragmentPopUp extends Fragment {
 
         root = (ViewGroup) inflater.inflate(R.layout.fragment_pop_up, null);
 
-        textview1 = (TextView) root.findViewById(R.id.name1);
-        textview2 = (TextView) root.findViewById(R.id.description1);
-        addButton = root.findViewById(R.id.addButton);
-
-        if (text1.isEmpty()) {
-            textview1.setText("");
-            textview2.setText("There is no idea yet.");
-            addButton.setVisibility(View.INVISIBLE);
-        } else {
-            textview1.setText(text1);
-            textview2.setText(text2);
-            addButton.setVisibility(View.VISIBLE);
-        }
+        setViews();
+        setDataToDisplay();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +55,25 @@ public class FragmentPopUp extends Fragment {
         return root;
     }
 
+    void setViews(){
+        textview1 = (TextView) root.findViewById(R.id.name1);
+        textview2 = (TextView) root.findViewById(R.id.description1);
+
+        addButton = root.findViewById(R.id.addButton);
+    }
+
+    private void setDataToDisplay(){
+        if (text1.isEmpty()) {
+            textview1.setText("");
+            textview2.setText("There is no idea yet.");
+            addButton.setVisibility(View.INVISIBLE);
+        } else {
+            textview1.setText(text1);
+            textview2.setText(text2);
+            addButton.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -83,14 +85,6 @@ public class FragmentPopUp extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (text1.isEmpty()) {
-            textview1.setText("");
-            textview2.setText("There is no idea yet.");
-            addButton.setVisibility(View.INVISIBLE);
-        } else {
-            textview1.setText(text1);
-            textview2.setText(text2);
-            addButton.setVisibility(View.VISIBLE);
-        }
+        setDataToDisplay();
     }
 }

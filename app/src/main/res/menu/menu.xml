@@ -8,8 +8,9 @@
         android:title = "Search"
         android:icon = "@drawable/ic_baseline_search_24"
         app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:actionViewClass="android.widget.SearchView"
 
+        />
 
     <item android:id="@+id/item1"
 
@@ -21,8 +22,26 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/item3"
-        android:title="Item3"
-        app:showAsAction="never"/>
+        android:title="Sort"
+        app:showAsAction="never">
+
+    <menu>
+        <item android:id="@+id/sort_most_liked_up"
+            android:title="Liked ↑"/>
+        ↑
+        <item android:id="@+id/sort_alphabetic_up"
+            android:title="Alphabetic ↑"/>
+
+        <item android:id="@+id/sort_alphabetic_down"
+            android:title="Alphabetic ↓"/>
+
+        <item android:id="@+id/sort_least_liked_up_down"
+            android:title="Liked ↓"/>
+
+
+    </menu>
+
+</item>
 
 
 </menu>
