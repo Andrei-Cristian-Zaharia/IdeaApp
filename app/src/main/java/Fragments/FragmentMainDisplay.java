@@ -1,18 +1,13 @@
 package Fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -22,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ideaapp.R;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -130,7 +123,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         if (!isOpen) { isOpen = true;
             FragmentPopUp.text1 = idea.get_nume();
             FragmentPopUp.text2 = idea.get_description();
-            PageLoader.ChangeCurrentItem(2);
+            PageLoader.ChangeCurrentItem(1);
         }
     }
 
@@ -170,6 +163,24 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
                 return true;
             case R.id.item3:
+
+                return true;
+
+            case R.id.sort_alphabetic_down:
+                Database.displayAllIdeasSorted("_nume", "DESCENDING");
+                return true;
+
+            case R.id.sort_least_liked_up_down:
+                Database.displayAllIdeasSorted("_likes", "ASCENDING");
+
+                return true;
+
+            case R.id.sort_alphabetic_up:
+                Database.displayAllIdeasSorted("_nume", "ASCENDING");
+                return true;
+
+            case R.id.sort_most_liked_up:
+                Database.displayAllIdeasSorted("_likes", "DESCENDING");
 
                 return true;
             default:
