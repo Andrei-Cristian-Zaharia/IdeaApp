@@ -10,7 +10,9 @@ import Fragments.FragmentMainDisplay;
 import Models.Idea;
 import Models.UserModel;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
@@ -73,6 +75,17 @@ public class Database {
         });
     }
 
+    public static void deleteIdea(String name){
+
+        uiThreadRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Idea> idea = uiThreadRealm.where(Idea.class).equalTo("name", name).findAll();
+                idea.deleteAllFromRealm();
+            }
+        });
+    }
+
     public static void displayAllIdeasSorted(String type, String comparator) { //ASCENDING, DESCENDING
 
         activity.displayData(getAllIdeasSortBy(type, comparator));
@@ -82,9 +95,9 @@ public class Database {
         List<Idea> results;
 
         if (comparator.equals("ASCENDING"))
-            results = uiThreadRealm.where(Idea.class).findAll().sort(type, Sort.ASCENDING);
+            results = uiThreadRealm.where(Idea.class).equalTo("private_idea", false).findAll().sort(type, Sort.ASCENDING);
         else
-            results = uiThreadRealm.where(Idea.class).findAll().sort(type, Sort.DESCENDING);
+            results = uiThreadRealm.where(Idea.class).equalTo("private_idea", false).findAll().sort(type, Sort.DESCENDING);
 
         return results;
     }
@@ -96,7 +109,7 @@ public class Database {
 
     public static UserModel getUser(String name){
 
-        return uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+        return uiThreadRealm.where(UserModel.class).equalTo("username", name).findFirst();
     }
 
     public static List<UserModel> getAllUsers() {
@@ -106,22 +119,22 @@ public class Database {
 
     public static List<Idea> getAllIdeas() {
 
-        return uiThreadRealm.where(Idea.class).findAll();
+        return uiThreadRealm.where(Idea.class).equalTo("private_idea", false).findAll();
     }
 
     public static List<Idea> getIdeasOf(String user) {
 
-        return uiThreadRealm.where(Idea.class).contains("_user_name", user).findAll();
+        return uiThreadRealm.where(Idea.class).equalTo("_user_name", user).findAll();
     }
 
     public static void giveLike(String ideaName) {
         String name = MainActivity.returnUser();
 
         uiThreadRealm.executeTransaction(r -> {
-            Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
+            Idea idea = uiThreadRealm.where(Idea.class).equalTo("_nume", ideaName).findFirst();
             idea.set_likes(idea.get_likes() + 1);
 
-            UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+            UserModel user = uiThreadRealm.where(UserModel.class).equalTo("username", name).findFirst();
             RealmList<String> ideas = user.getLiked_ideas();
             ideas.add(ideaName);
 
@@ -133,10 +146,10 @@ public class Database {
         String name = MainActivity.returnUser();
 
         uiThreadRealm.executeTransaction(r -> {
-            Idea idea = uiThreadRealm.where(Idea.class).contains("_nume", ideaName).findFirst();
+            Idea idea = uiThreadRealm.where(Idea.class).equalTo("_nume", ideaName).findFirst();
             idea.set_likes(idea.get_likes() - 1);
 
-            UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+            UserModel user = uiThreadRealm.where(UserModel.class).equalTo("username", name).findFirst();
             RealmList<String> ideas = user.getLiked_ideas();
             ideas.remove(ideaName);
 
@@ -148,7 +161,7 @@ public class Database {
     public static boolean isIdeaLiked(String ideaName) {
         String name = MainActivity.returnUser();
 
-        UserModel user = uiThreadRealm.where(UserModel.class).contains("username", name).findFirst();
+        UserModel user = uiThreadRealm.where(UserModel.class).equalTo("username", name).findFirst();
 
         RealmList<String> ideas = user.getLiked_ideas();
 
