@@ -9,15 +9,12 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ideaapp.R;
 
@@ -25,7 +22,6 @@ import java.util.List;
 
 import Components.MainActivity;
 import Features.Database;
-import Features.Idea_Adapter;
 import Features.Personal_Idea_Adapter;
 import Models.Idea;
 import Models.UserModel;
@@ -33,28 +29,17 @@ import io.realm.OrderedRealmCollection;
 
 public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.OnNoteListener {
 
-    UserModel user;
-
     private RecyclerView recyclerView;
-    private Personal_Idea_Adapter adapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
-    private TextView name_text;
-    private TextView likesNr;
-    private TextView ideasNr;
-    private TextView phoneNr;
-    private TextView emailAddress;
+    private TextView name_text, likesNr, ideasNr, phoneNr, emailAddress;
     private SwitchCompat switchCompat;
     private ViewGroup root;
 
     private List<Idea> current_ideas;
 
-    public FragmentAccount() {}
+    private UserModel user;
 
-    public static FragmentAccount newInstance(String param1, String param2) {
-        FragmentAccount fragment = new FragmentAccount();
-        return fragment;
-    }
+    public FragmentAccount() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
@@ -68,17 +53,14 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         user = Database.getUser(MainActivity.returnUser());
 
         setViews();
-        setDataToDisplay();
-        DisplayData();
+        displayData();
+        refreshData();
 
         switchCompat.setChecked(user.getShare_info());
         phoneNr.setText(user.getPhone_nr());
         emailAddress.setText(user.getEmail_address());
-        ideasNr.setText(String.valueOf(current_ideas.size()));
 
         checkSwitch();
-
-        likesNr.setText(String.valueOf(getNrOfLikes()));
 
         switchCompat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,14 +152,21 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
     }
 
     private void setDataToDisplay(){
+
         name_text.setText(MainActivity.returnUser());
+        likesNr.setText(String.valueOf(getNrOfLikes()));
+        ideasNr.setText(String.valueOf(current_ideas.size()));
     }
 
-    public void DisplayData() {
+    void refreshData(){
+        setDataToDisplay();
+    }
+
+    public void displayData() {
         current_ideas = Database.getIdeasOf(MainActivity.returnUser());
 
-        adapter = new Personal_Idea_Adapter(this.requireContext(), (OrderedRealmCollection<Idea>) current_ideas, this, recyclerView);
-        mLayoutManager = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        Personal_Idea_Adapter adapter = new Personal_Idea_Adapter((OrderedRealmCollection<Idea>) current_ideas, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         SnapHelper snapHelper = new PagerSnapHelper();
 
         recyclerView.setLayoutManager(mLayoutManager);
@@ -188,6 +177,13 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
     @Override
     public void onNoteClick(int position) {
 
-        Toast.makeText(this.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this.getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refreshData();
     }
 }

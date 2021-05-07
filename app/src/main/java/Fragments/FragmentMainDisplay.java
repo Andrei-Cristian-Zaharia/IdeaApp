@@ -31,23 +31,15 @@ import io.realm.OrderedRealmCollection;
 
 public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNoteListener {
 
-    public static String EXTRA_TEXT1 = "com.example.ideaapp.EXTRA_TEXT1 ";
-    public static String EXTRA_TEXT2 = "com.example.ideaapp.EXTRA_TEXT2 ";
-
-    Idea_Adapter adapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    RecyclerView recycleView;
-    SwipeRefreshLayout swipeContainer;
-    FloatingActionButton addIdeaButton;
     private List<Idea> current_ideas;
     static boolean isOpen;
-    String[] tags;
-    ViewGroup root;
 
-    public static FragmentMainDisplay newInstance(String param1, String param2) {
-        FragmentMainDisplay fragment = new FragmentMainDisplay();
-        return fragment;
-    }
+    private RecyclerView recycleView;
+    private SwipeRefreshLayout swipeContainer;
+    private FloatingActionButton addIdeaButton;
+    private ViewGroup root;
+
+    private Idea_Adapter adapter;
 
     public FragmentMainDisplay() {
     }
@@ -63,8 +55,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         setHasOptionsMenu(true);
 
         root = (ViewGroup) inflater.inflate(R.layout.fragment_main_display, null);
-
-        tags = getResources().getStringArray(R.array.tags);
 
         setViews();
 
@@ -97,13 +87,11 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         addIdeaButton = (FloatingActionButton) root.findViewById(R.id.open_new_idea);
     }
 
-    public void DisplayData(String[] names, List<Idea> _ideas) {
+    public void displayData(List<Idea> _ideas) {
         current_ideas = _ideas;
 
-        //Database.updateUsers();
-
-        adapter = new Idea_Adapter(this.getContext(), Database.getRealm(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
-        mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
+        adapter = new Idea_Adapter(this.getContext(), (OrderedRealmCollection<Idea>) _ideas, this, recycleView);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
 
         recycleView.setLayoutManager(mLayoutManager);
         recycleView.setAdapter(adapter);

@@ -1,11 +1,9 @@
 package Components;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,13 +25,16 @@ import static Components.MainActivity.returnUser;
 
 public class AddIdea extends AppCompatActivity {
 
-    EditText nume, descriere;
-    String nume1, descriere1;
-    AutoCompleteTextView autoCompleteTextView;
-    List<String> ideaTags = new ArrayList<String>();
-    ChipGroup chipGroup;
-    String[] tags;
-    Button button;
+    private EditText nume, descriere;
+    private String nume1, descriere1;
+    private String[] tags;
+
+    private final List<String> ideaTags = new ArrayList<String>();
+    private AutoCompleteTextView autoCompleteTextView;
+    private ChipGroup chipGroup;
+
+    private Button button;
+
     private int currentTagsNr = 0;
 
     @Override
@@ -41,13 +42,10 @@ public class AddIdea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_idea);
 
-        chipGroup = (ChipGroup) findViewById(R.id.chip_group);
-        nume = (EditText) findViewById(R.id.nameViewscris);
-        descriere = (EditText) findViewById(R.id.description1);
-        button = (Button) findViewById(R.id.button);
-        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+        setViews();
 
         tags = getResources().getStringArray(R.array.tags);
+
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.dropdown_item, tags);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
@@ -77,6 +75,14 @@ public class AddIdea extends AppCompatActivity {
         });
     }
 
+    void setViews(){
+        chipGroup = (ChipGroup) findViewById(R.id.chip_group);
+        nume = (EditText) findViewById(R.id.nameViewscris);
+        descriere = (EditText) findViewById(R.id.description1);
+        button = (Button) findViewById(R.id.button);
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+    }
+
     void createNewChip(String text) {
         if (currentTagsNr == 3) return;
 
@@ -96,8 +102,6 @@ public class AddIdea extends AppCompatActivity {
                 handleChipCloseIconClicked((Chip) v);
             }
         });
-
-        Log.v("Tag: ", text + " created !");
     }
 
     private void handleChipCloseIconClicked(Chip chip) {

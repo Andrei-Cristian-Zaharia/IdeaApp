@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ideaapp.R;
@@ -14,9 +13,10 @@ import Features.FragmentAdapter;
 
 public class PageLoader extends AppCompatActivity {
 
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
+    private FragmentAdapter adapter;
+
     static ViewPager2 viewPager2;
-    FragmentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
