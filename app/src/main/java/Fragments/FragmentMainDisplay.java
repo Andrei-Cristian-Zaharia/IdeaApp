@@ -62,7 +62,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         recycleView.addItemDecoration(spacingItemDecorator);
 
         Database.setActivity(this);
-        Database.displayAllIdeasSorted("_nume", "ASCENDING");
+        Database.displayAllIdeas();
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

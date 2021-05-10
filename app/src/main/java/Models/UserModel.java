@@ -19,7 +19,7 @@ public class UserModel extends RealmObject {
     private String phone_nr;
     private Boolean share_info;
 
-    public UserModel() { _id = new ObjectId(); partition_id = "IdeaApp"; liked_ideas = new RealmList<String>(); }
+    public UserModel() { _id = new ObjectId(); partition_id = "IdeaApp"; liked_ideas = new RealmList<String>(); email_address = ""; phone_nr = ""; share_info = false; }
 
     // Standard getters & setters
     public ObjectId get_id() { return _id; }
