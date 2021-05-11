@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
@@ -48,6 +49,7 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
 
         private final TextView nameText, descriptionText;
         private Button editButton, deleteButton;
+        private SwitchCompat ideaSwitch;
 
         private final OnNoteListener onNoteListener;
 
@@ -58,6 +60,7 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
             descriptionText = view.findViewById(R.id.description_idea_text);
             editButton = view.findViewById(R.id.edit_button);
             deleteButton = view.findViewById(R.id.delete_button);
+            ideaSwitch = view.findViewById(R.id.idea_Switch);
 
             onNoteListener = _onNoteListener;
 
@@ -68,6 +71,7 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
         public void bind(Idea idea){
             nameText.setText(idea.get_nume());
             descriptionText.setText(idea.get_description());
+            ideaSwitch.setChecked(idea.getPrivate_idea());
 
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,6 +87,16 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
                 }
             });
 
+            ideaSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Database.getRealm().executeTransaction(r ->{
+                        idea.setPrivate_idea(ideaSwitch.isChecked());
+
+                        r.insertOrUpdate(idea);
+                    });
+                }
+            });
         }
 
         @Override
