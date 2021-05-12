@@ -54,7 +54,7 @@
         android:id="@+id/buttonAction"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/button_succes_background"
+        android:background="@drawable/button_error_background"
         android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@+id/LayoutDialog"

@@ -2,7 +2,12 @@
     <string name="app_name">IdeaApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name = "ok">Okay</string>
+    <string name = "yes">Yes</string>
+    <string name = "no">No</string>
+    <string name ="sure">Are you sure?</string>
+    <string name = "ups">Oh...something did not work</string>
+    <string name = "title">Wait</string>
     <string-array name="tags">
         <item>Health</item>
         <item>Mobile Application</item>
