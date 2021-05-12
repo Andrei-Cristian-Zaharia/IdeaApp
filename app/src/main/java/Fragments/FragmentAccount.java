@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SwitchCompat;
@@ -14,14 +15,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ideaapp.R;
 
 import java.util.List;
 
+import Components.EditIdea;
 import Components.MainActivity;
 import Features.Database;
 import Features.Personal_Idea_Adapter;
@@ -33,11 +33,11 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
 
     private RecyclerView recyclerView;
 
-    private TextView name_text, likesNr, ideasNr, phoneNr, emailAddress;
+    private static TextView name_text, likesNr, ideasNr, phoneNr, emailAddress;
     private SwitchCompat switchCompat;
     private ViewGroup root;
 
-    private List<Idea> current_ideas;
+    private static List<Idea> current_ideas;
 
     private UserModel user;
 
@@ -135,7 +135,7 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         }
     }
 
-    int getNrOfLikes(){
+    private static int getNrOfLikes(){
         int likes = 0;
         for (Idea idea: current_ideas) likes += idea.get_likes();
 
@@ -153,14 +153,14 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         recyclerView = root.findViewById(R.id.recycleView_idea);
     }
 
-    private void setDataToDisplay(){
+    private static void setDataToDisplay(){
 
         name_text.setText(MainActivity.returnUser());
         likesNr.setText(String.valueOf(getNrOfLikes()));
         ideasNr.setText(String.valueOf(current_ideas.size()));
     }
 
-    void refreshData(){
+    public static void refreshData(){
         setDataToDisplay();
     }
 
@@ -187,5 +187,10 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         super.onResume();
 
         refreshData();
+    }
+
+    private void startActivity(Idea idea){
+        Intent intent = new Intent(FragmentAccount.this.getContext(), EditIdea.class);
+        startActivity(intent);
     }
 }

@@ -142,6 +142,21 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             likesText.setText("Likes: " + idea.get_likes().toString());
 
             chipGroup.removeAllViews();
+            String tag_img = idea.getTags().get(0);
+
+            if (tag_img.equals("Health"))
+                image.setBackgroundResource(R.drawable.health);
+            else if (tag_img.equals("Sport"))
+                image.setBackgroundResource(R.drawable.sports);
+            else if (tag_img.equals("Food"))
+                image.setBackgroundResource(R.drawable.food);
+            else if (tag_img.equals("Gifts"))
+                image.setBackgroundResource(R.drawable.gifts);
+            else if (tag_img.equals("Mobile Application"))
+                image.setBackgroundResource(R.drawable.mobile);
+            else if (tag_img.equals("Circuit"))
+                image.setBackgroundResource(R.drawable.circuits);
+
             for (String tag: idea.getTags()) {
                 createNewChip(tag);
             }
