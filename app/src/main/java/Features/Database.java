@@ -80,9 +80,16 @@ public class Database {
         uiThreadRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<Idea> idea = uiThreadRealm.where(Idea.class).equalTo("name", name).findAll();
+                RealmResults<Idea> idea = uiThreadRealm.where(Idea.class).equalTo("_nume", name).findAll();
                 idea.deleteAllFromRealm();
             }
+        });
+    }
+
+    public static void editIdea(Idea idea){
+        uiThreadRealm.executeTransaction(r -> {
+
+            r.insertOrUpdate(idea);
         });
     }
 

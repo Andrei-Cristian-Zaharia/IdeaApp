@@ -12,6 +12,7 @@
         android:theme="@style/Theme.IdeaApp">
         <activity android:name="Components.PageLoader"/>
         <activity android:name="Components.AddIdea"/>
+        <activity android:name="Components.EditIdea"/>
         <activity android:name="Components.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

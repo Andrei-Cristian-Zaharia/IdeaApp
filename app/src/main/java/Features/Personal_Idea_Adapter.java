@@ -1,6 +1,7 @@
 package Features;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ideaapp.R;
 
+import Components.EditIdea;
+import Components.PageLoader;
 import Fragments.FragmentAccount;
 import Models.Idea;
 import io.realm.OrderedRealmCollection;
@@ -76,14 +80,17 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "You are editing this idea.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(v.getContext(), EditIdea.class);
+                    v.getContext().startActivity(intent);
+                    EditIdea.setIdea(idea);
                 }
             });
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Idea deleted !", Toast.LENGTH_SHORT).show();
+                    Database.deleteIdea(idea.get_nume());
+                    FragmentAccount.refreshData();
                 }
             });
 
