@@ -67,7 +67,10 @@ public class EditIdea extends AppCompatActivity {
                 descriere1 = descriere.getText().toString();
 
                 if (nume1.length() > 3 && descriere1.length() > 10) {
-                    Database.editIdea(idea);
+
+                    Database.editIdea(idea, nume.getText().toString(), descriere.getText().toString(), ideaTags);
+
+                    ideaTags.clear();
                     ideaTags.clear();
                     nume.setText("");
                     currentTagsNr = 0;

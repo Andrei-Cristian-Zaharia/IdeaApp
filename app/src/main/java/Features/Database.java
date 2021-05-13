@@ -2,6 +2,8 @@ package Features;
 
 import android.content.Context;
 
+import org.bson.types.ObjectId;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -56,24 +58,35 @@ public class Database {
 
     public static void InsertIdea(String description, String idea_name, String user, List<String> tags) {
         uiThreadRealm.executeTransaction(r -> {
-            Idea idea = new Idea();
-            RealmList<String> ideaTags = idea.getTags();
-            for (String tag : tags) {
-                ideaTags.add(tag);
-            }
 
+            Idea idea = r.createObject(Idea.class, new ObjectId());
+
+            idea.setPartition_id("IdeaApp");
+            idea.set_likes(0);
+            idea.setTags_string("");
+            idea.setPrivate_idea(false);
+
+            RealmList<String> ideaTags = idea.getTags();
+
+            ideaTags.addAll(tags);
+
+            idea.setTags(ideaTags);
             idea.set_nume(idea_name);
             idea.set_description(description);
             idea.set_user_name(user);
-
-            r.insertOrUpdate(idea);
         });
     }
 
     public static void InsertUser(String name) {
         uiThreadRealm.executeTransaction(r -> {
-            UserModel userModel = new UserModel();
+            UserModel userModel = r.createObject(UserModel.class, new ObjectId());
+            userModel.setPartition_id("IdeaApp");
+
             userModel.setUsername(name);
+            userModel.setLiked_ideas(new RealmList<String>());
+            userModel.setPhone_nr("");
+            userModel.setEmail_address("");
+            userModel.setShare_info(false);
 
             r.insertOrUpdate(userModel);
         });
@@ -90,8 +103,14 @@ public class Database {
         });
     }
 
-    public static void editIdea(Idea idea){
-        uiThreadRealm.executeTransaction(r -> {
+    public static void editIdea(Idea idea, String nume, String descriere, List<String> tags){
+        uiThreadRealm.executeTransaction( r -> {
+            RealmList<String> ideaTags = new RealmList<>();
+
+            ideaTags.addAll(tags);
+            idea.setTags(ideaTags);
+            idea.set_nume(nume);
+            idea.set_description(descriere);
 
             r.insertOrUpdate(idea);
         });
