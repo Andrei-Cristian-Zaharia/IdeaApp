@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import Components.MainActivity;
+import Components.PageLoader;
 import Fragments.FragmentMainDisplay;
 import Models.Idea;
 import Models.UserModel;
@@ -37,6 +38,9 @@ public class Database {
                             Objects.requireNonNull(app.currentUser()), "IdeaApp").allowWritesOnUiThread(true).build();
 
                     uiThreadRealm = Realm.getInstance(config);
+                }
+                else {
+                    PageLoader.showErrorDialog("There is no enthernet connection !");
                 }
             });
         }

@@ -65,6 +65,7 @@ public class EditIdea extends AppCompatActivity {
             public void onClick(View view) {
                 nume1 = nume.getText().toString();
                 descriere1 = descriere.getText().toString();
+
                 if (nume1.length() > 3 && descriere1.length() > 10) {
                     Database.editIdea(idea);
                     ideaTags.clear();
@@ -72,24 +73,27 @@ public class EditIdea extends AppCompatActivity {
                     currentTagsNr = 0;
                     chipGroup.removeAllViews();
                     descriere.setText("");
+                    PageLoader.showSuccesDialog("Idea was successfully modified !");
                     finish();
                 }
             }
         });
     }
 
-    public static void setIdea(Idea aux) { idea = aux; }
+    public static void setIdea(Idea aux) {
+        idea = aux;
+    }
 
-    void loadData(){
+    void loadData() {
         nume.setText(idea.get_nume());
         descriere.setText(idea.get_description());
 
-        for (String tag: idea.getTags()) {
+        for (String tag : idea.getTags()) {
             createNewChip(tag);
         }
     }
 
-    void setViews(){
+    void setViews() {
         chipGroup = (ChipGroup) findViewById(R.id.chip_groupEdit);
         nume = (EditText) findViewById(R.id.nameEdit);
         descriere = (EditText) findViewById(R.id.descriptionEdit);

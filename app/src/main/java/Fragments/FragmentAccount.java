@@ -23,6 +23,7 @@ import java.util.List;
 
 import Components.EditIdea;
 import Components.MainActivity;
+import Components.PageLoader;
 import Features.Database;
 import Features.Personal_Idea_Adapter;
 import Models.Idea;
@@ -67,11 +68,7 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         switchCompat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkSwitch();
-
-                Database.uiThreadRealm.executeTransaction(r ->{
-                    user.setShare_info(switchCompat.isChecked());
-                });
+                setSwitchCompat();
             }
         });
 
@@ -118,6 +115,14 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         });
 
         return root;
+    }
+
+    void setSwitchCompat(){
+        checkSwitch();
+
+        Database.uiThreadRealm.executeTransaction(r ->{
+            user.setShare_info(switchCompat.isChecked());
+        });
     }
 
     void checkSwitch(){
@@ -167,7 +172,7 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
     public void displayData() {
         current_ideas = Database.getIdeasOf(MainActivity.returnUser());
 
-        Personal_Idea_Adapter adapter = new Personal_Idea_Adapter((OrderedRealmCollection<Idea>) current_ideas, this);
+        Personal_Idea_Adapter adapter = new Personal_Idea_Adapter(FragmentAccount.this.getContext(), (OrderedRealmCollection<Idea>) current_ideas, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         SnapHelper snapHelper = new PagerSnapHelper();
 

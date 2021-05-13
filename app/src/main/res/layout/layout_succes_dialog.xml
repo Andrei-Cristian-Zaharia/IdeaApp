@@ -30,7 +30,8 @@
             app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/TextTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/TextTitle"/>
+            app:layout_constraintTop_toTopOf="@id/TextTitle"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:id="@+id/textMessage"
