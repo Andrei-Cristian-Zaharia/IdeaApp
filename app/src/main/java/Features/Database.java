@@ -66,9 +66,10 @@ public class Database {
             idea.setTags_string("");
             idea.setPrivate_idea(false);
 
-            RealmList<String> ideaTags = idea.getTags();
+            RealmList<String> ideaTags = new RealmList<>();
 
-            ideaTags.addAll(tags);
+            for (String tag : tags)
+                ideaTags.add(tag);
 
             idea.setTags(ideaTags);
             idea.set_nume(idea_name);
