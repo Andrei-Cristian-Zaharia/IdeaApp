@@ -75,7 +75,7 @@ public class Personal_Idea_Adapter extends RealmRecyclerViewAdapter<Idea, Recycl
         @SuppressLint("SetTextI18n")
         public void bind(Idea idea, Context context) {
             nameText.setText(idea.get_nume());
-            descriptionText.setText(idea.get_description());
+            descriptionText.setText(idea.get_description().get(0));
             ideaSwitch.setChecked(idea.getPrivate_idea());
 
             editButton.setOnClickListener(new View.OnClickListener() {

@@ -6,11 +6,12 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 import org.bson.types.ObjectId;
-
 public class Idea extends RealmObject {
+
     @PrimaryKey
     private ObjectId _id;
-    private String _description;
+    @Required
+    private RealmList<String> _description;
     private Integer _likes;
     private String _nume;
     private String _user_name;
@@ -23,8 +24,8 @@ public class Idea extends RealmObject {
     // Standard getters & setters
     public ObjectId get_id() { return _id; }
     public void set_id(ObjectId _id) { this._id = _id; }
-    public String get_description() { return _description; }
-    public void set_description(String _description) { this._description = _description; }
+    public RealmList<String> get_description() { return _description; }
+    public void set_description(RealmList<String> _description) { this._description = _description; }
     public Integer get_likes() { return _likes; }
     public void set_likes(Integer _likes) { this._likes = _likes; }
     public String get_nume() { return _nume; }

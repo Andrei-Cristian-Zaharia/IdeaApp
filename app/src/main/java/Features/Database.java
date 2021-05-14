@@ -56,7 +56,7 @@ public class Database {
         return uiThreadRealm;
     }
 
-    public static void InsertIdea(String description, String idea_name, String user, List<String> tags) {
+    public static void InsertIdea(RealmList<String> description, String idea_name, String user, List<String> tags) {
         uiThreadRealm.executeTransaction(r -> {
 
             Idea idea = r.createObject(Idea.class, new ObjectId());
@@ -103,7 +103,7 @@ public class Database {
         });
     }
 
-    public static void editIdea(Idea idea, String nume, String descriere, List<String> tags){
+    public static void editIdea(Idea idea, String nume, RealmList<String> descriere, List<String> tags){
         uiThreadRealm.executeTransaction( r -> {
             RealmList<String> ideaTags = new RealmList<>();
 
