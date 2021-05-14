@@ -35,10 +35,10 @@
     <TextView
         android:id="@+id/name1"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:autoSizeMaxTextSize="100dp"
         android:autoSizeMinTextSize="40dp"
-        android:gravity="center|bottom"
+        android:gravity="center"
         android:textSize="25sp"
         android:textStyle="bold"
         tools:text="Name">
@@ -46,23 +46,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="60dp">
 
-        <TextView
-            android:id="@+id/description1"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:autoSizeMaxTextSize="100dp"
-            android:autoSizeMinTextSize="20dp"
-            android:layout_marginTop="30dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Description" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/relativeLayoutPopUp"/>
     </ScrollView>
 
     <FrameLayout

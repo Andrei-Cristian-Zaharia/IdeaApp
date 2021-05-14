@@ -20,6 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 import Features.Database;
 import Features.FragmentAdapter;
 import Fragments.FragmentAccount;
+import Fragments.FragmentPopUp;
 import Models.Idea;
 
 enum Response {NONE, YES, NO}
@@ -96,7 +97,7 @@ public class PageLoader extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogTheme);
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_succes_dialog, null);
-        //(ConstraintLayout) findViewById(R.id.LayoutDialogContainer
+
         builder.setView(view);
         ((Button) view.findViewById(R.id.buttonAction)).setText(mContext.getString(R.string.ok));
         ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.done);
@@ -167,6 +168,7 @@ public class PageLoader extends AppCompatActivity {
             public void onClick(View view) {
 
                 Database.deleteIdea(idea.get_nume());
+                FragmentPopUp.idea = null;
                 FragmentAccount.refreshData();
 
                 alertDialog.dismiss();
