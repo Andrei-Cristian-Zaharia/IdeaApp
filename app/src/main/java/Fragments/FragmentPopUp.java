@@ -3,6 +3,8 @@ package Fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -50,7 +54,8 @@ public class FragmentPopUp extends Fragment {
 
     public static Idea idea;
 
-    public FragmentPopUp() {}
+    public FragmentPopUp() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,8 +92,7 @@ public class FragmentPopUp extends Fragment {
                 if (!tel.isEmpty()) {
                     phoneText = popUp.getContentView().findViewById(R.id.contact_info_telephone);
                     phoneText.setText("Telephone: " + tel);
-                }
-                else {
+                } else {
                     phoneText = popUp.getContentView().findViewById(R.id.contact_info_telephone);
                     phoneText.setText("Telephone: -");
                 }
@@ -154,10 +158,31 @@ public class FragmentPopUp extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     void createPage() {
         for (String text : idea.get_description())
-            if (ID == 1000){
+            if (ID == 1000) {
                 int aux = textview1.getId();
-                addTextView(aux + 1, text);
-            } else addTextView(ID, text);
+                    addTextView(aux + 1, text);
+            } else {
+
+                if (text.startsWith("I/G")) {
+                    String aux = text.substring(4);
+                    Bitmap bitmap = StringToBitMap(aux);
+                    addImageView(ID, bitmap);
+                    continue;
+                }
+
+                addTextView(ID, text);
+            }
+    }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -179,6 +204,26 @@ public class FragmentPopUp extends Fragment {
 
         if (relativeLayout != null)
             relativeLayout.addView(textView);
+    }
+
+    void addImageView(int id, Bitmap bitmap) {
+
+        ImageView image = new ImageView(FragmentPopUp.this.getContext());
+
+        image.setId(ID);
+        ID++;
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
+        params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        params.addRule(RelativeLayout.BELOW, id - 1);
+        image.setLayoutParams(params);
+
+        image.setImageBitmap(bitmap);
+
+        relativeLayout.addView(image);
     }
 
     @Override
