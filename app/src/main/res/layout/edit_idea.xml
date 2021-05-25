@@ -3,45 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="Components.AddIdea">
+    tools:context="Components.EditIdea">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/nameViewscris"
+            android:id="@+id/nameEdit"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="25dp"
-            android:hint="Enter idea name ..."/>
+            android:hint="Edit idea name here ..."/>
 
         <ScrollView
-            android:id="@+id/scroll_view"
+            android:id="@+id/scroll_viewEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/nameViewscris"
+            android:layout_below="@+id/nameEdit"
             android:layout_marginTop="9dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:id="@+id/addIdeaLiniar">
+                android:id="@+id/editIdeaLiniar">
             </RelativeLayout>
         </ScrollView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_tag"
+            android:id="@+id/card_tagEdit"
             android:layout_width="match_parent"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             app:cardCornerRadius="5dp"
-            android:layout_below="@id/scroll_view">
+            android:layout_below="@id/scroll_viewEdit">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -53,36 +53,36 @@
                     android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/dropdown_menu">
+                    android:id="@+id/dropdown_menuEdit">
 
                     <AutoCompleteTextView
-                        android:id="@+id/autoComplete"
+                        android:id="@+id/autoCompleteEdit"
                         android:layout_width="210dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
                         android:inputType="none"
                         android:focusable="false"
                         android:keyboardNavigationCluster="false"
-                        android:text="Choose a tag ..."/>
+                        android:text="Edit tag ..."/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chip_group"
+                    android:id="@+id/chip_groupEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:layout_below="@id/dropdown_menu"/>
+                    android:layout_below="@id/dropdown_menuEdit"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/card_tag"
+            android:layout_below="@id/card_tagEdit"
             android:text="OK" />
     </RelativeLayout>
 

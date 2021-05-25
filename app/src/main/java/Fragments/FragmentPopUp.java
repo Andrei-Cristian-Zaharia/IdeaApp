@@ -1,36 +1,69 @@
 package Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
+import android.util.Base64;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ideaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import Features.Database;
+import Models.Idea;
 
 public class FragmentPopUp extends Fragment {
 
     private FloatingActionButton addButton;
     private boolean isLiked;
-    private TextView textview1, textview2;
+    private TextView textview1;
+    private TextView phoneText, emailText;
     private ViewGroup root;
+    private CardView info_card;
+    private Button user_infoButton;
+    private RelativeLayout relativeLayout;
 
-    static String text1 = "";
-    static String text2 = "";
+    private int ID = 1000;
 
-    public FragmentPopUp() {}
+    PopupWindow popUp;
+
+    public static Idea idea;
+
+    public FragmentPopUp() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,16 +71,50 @@ public class FragmentPopUp extends Fragment {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_pop_up, null);
 
         setViews();
-        setDataToDisplay();
+
+        user_infoButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+
+                int[] location = new int[2];
+                user_infoButton.getLocationOnScreen(location);
+                final View mView = inflater.inflate(R.layout.contact_user, null, false);
+                popUp = new PopupWindow(mView, 800, 400, false);
+                popUp.setTouchable(true);
+                popUp.setFocusable(true);
+                popUp.setOutsideTouchable(true);
+                popUp.showAtLocation(root, Gravity.NO_GRAVITY, location[0], location[1]);
+
+                String tel = Database.getUser(idea.get_user_name()).getPhone_nr();
+                String email = Database.getUser(idea.get_user_name()).getEmail_address();
+
+                if (!tel.isEmpty()) {
+                    phoneText = popUp.getContentView().findViewById(R.id.contact_info_telephone);
+                    phoneText.setText("Telephone: " + tel);
+                } else {
+                    phoneText = popUp.getContentView().findViewById(R.id.contact_info_telephone);
+                    phoneText.setText("Telephone: -");
+                }
+
+                if (!email.isEmpty()) {
+                    emailText = popUp.getContentView().findViewById(R.id.contact_info_email);
+                    emailText.setText("Email: " + email);
+                } else {
+                    emailText = popUp.getContentView().findViewById(R.id.contact_info_email);
+                    emailText.setText("Email: -");
+                }
+            }
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isLiked = Database.isIdeaLiked(text1);
+                isLiked = Database.isIdeaLiked(idea.get_nume());
                 if (!isLiked) {
-                    Database.giveLike(text1);
+                    Database.giveLike(idea.get_nume());
                 } else {
-                    Database.removeLike(text1);
+                    Database.removeLike(idea.get_nume());
                 }
             }
         });
@@ -55,32 +122,119 @@ public class FragmentPopUp extends Fragment {
         return root;
     }
 
-    void setViews(){
+    void setViews() {
         textview1 = (TextView) root.findViewById(R.id.name1);
-        textview2 = (TextView) root.findViewById(R.id.description1);
+
+        info_card = root.findViewById(R.id.contact_info);
+        user_infoButton = root.findViewById(R.id.see_contact_info);
+        relativeLayout = root.findViewById(R.id.relativeLayoutPopUp);
 
         addButton = root.findViewById(R.id.addButton);
     }
 
-    private void setDataToDisplay(){
-        if (text1.isEmpty()) {
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @SuppressLint("SetTextI18n")
+    private void setDataToDisplay() {
+
+        if (idea == null) {
             textview1.setText("");
-            textview2.setText("There is no idea yet.");
+            relativeLayout.removeAllViews();
             addButton.setVisibility(View.INVISIBLE);
+            info_card.setVisibility(View.INVISIBLE);
         } else {
-            textview1.setText(text1);
-            textview2.setText(text2);
+            textview1.setText(idea.get_nume());
             addButton.setVisibility(View.VISIBLE);
+
+            createPage();
+
+            if (Database.getUser(idea.get_user_name()).getShare_info()) {
+                info_card.setVisibility(View.VISIBLE);
+            } else {
+                info_card.setVisibility(View.INVISIBLE);
+            }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    void createPage() {
+        for (String text : idea.get_description())
+            if (ID == 1000) {
+                int aux = textview1.getId();
+                    addTextView(aux + 1, text);
+            } else {
+
+                if (text.startsWith("I/G")) {
+                    String aux = text.substring(4);
+                    Bitmap bitmap = StringToBitMap(aux);
+                    addImageView(ID, bitmap);
+                    continue;
+                }
+
+                addTextView(ID, text);
+            }
+    }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    void addTextView(int id, String text) {
+
+        TextView textView = new TextView(FragmentPopUp.this.getContext());
+        textView.setId(ID);
+        ID++;
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.addRule(RelativeLayout.BELOW, id - 1);
+        textView.setLayoutParams(params);
+
+        textView.setText(text);
+        textView.setTextSize(20);
+
+        if (relativeLayout != null)
+            relativeLayout.addView(textView);
+    }
+
+    void addImageView(int id, Bitmap bitmap) {
+
+        ImageView image = new ImageView(FragmentPopUp.this.getContext());
+
+        image.setId(ID);
+        ID++;
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
+        params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        params.addRule(RelativeLayout.BELOW, id - 1);
+        image.setLayoutParams(params);
+
+        image.setImageBitmap(bitmap);
+
+        relativeLayout.addView(image);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        
+
+        relativeLayout.removeAllViews();
         FragmentMainDisplay.closeLayout();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onResume() {
         super.onResume();

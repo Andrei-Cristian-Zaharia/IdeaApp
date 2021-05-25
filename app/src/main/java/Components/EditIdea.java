@@ -8,10 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +24,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ideaapp.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -40,32 +39,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Features.Database;
+import Models.Idea;
 import io.realm.RealmList;
 
 import static Components.MainActivity.returnUser;
 
-enum ToolType { NONE, TEXT, IMAGE}
-
-public class AddIdea extends AppCompatActivity {
-
-    private EditText nume;
+public class EditIdea extends AppCompatActivity {
+    private EditText nume, descriere;
     private String nume1;
     private String[] tags;
     private final int RESULT_LOAD_IMG = 123;
 
-    private final RealmList<String> descriere1 = new RealmList<>();
+    private RealmList<String> descriere1 = new RealmList<>();
 
     private final List<String> ideaTags = new ArrayList<String>();
     private AutoCompleteTextView autoCompleteTextView;
     private ChipGroup chipGroup;
 
-    private RelativeLayout relativeLayout;
-    private Bitmap selectedImage;
-
     private Button button;
-    private PopupWindow popUp;
 
     private int currentTagsNr = 0;
+    private Bitmap selectedImage;
+
+    static Idea idea;
+
+    private RelativeLayout relativeLayout;
+
+    private PopupWindow popUp;
 
     private final ArrayList<View> viewList = new ArrayList<>();
     private final ArrayList<FloatingActionButton> floatingActionButtons = new ArrayList<>();
@@ -77,16 +77,16 @@ public class AddIdea extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_idea);
+        setContentView(R.layout.edit_idea);
 
         setViews();
+
+        loadData();
 
         tags = getResources().getStringArray(R.array.tags);
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.dropdown_item, tags);
         autoCompleteTextView.setAdapter(arrayAdapter);
-
-        addTextView(R.id.nameViewscris);
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,23 +99,24 @@ public class AddIdea extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 nume1 = nume.getText().toString();
 
                 if (nume1.length() > 3) {
-
                     for (View view1 : viewList)
                         if (view1 instanceof EditText)
-                            descriere1.add(((TextView) view1).getText().toString());
+                            descriere1.add(((EditText) view1).getText().toString());
                         else if (view1 instanceof ImageView){
                             Bitmap bitmap = ((BitmapDrawable) ((ImageView) view1).getDrawable()).getBitmap();
                             descriere1.add("I/G " + BitMapToString(bitmap));
                         }
 
-                    Database.InsertIdea(descriere1, nume1, returnUser(), ideaTags);
+                    Database.editIdea(idea, nume1, descriere1, ideaTags);
                     ideaTags.clear();
                     nume.setText("");
                     currentTagsNr = 0;
                     chipGroup.removeAllViews();
+                    PageLoader.showSuccesDialog("Idea was successfully modified !");
                     finish();
                 }
             }
@@ -130,13 +131,28 @@ public class AddIdea extends AppCompatActivity {
         return temp;
     }
 
-    void setViews() {
-        chipGroup = (ChipGroup) findViewById(R.id.chip_group);
-        nume = (EditText) findViewById(R.id.nameViewscris);
-        button = (Button) findViewById(R.id.button);
-        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+    public static void setIdea(Idea aux) {
+        idea = aux;
+    }
 
-        relativeLayout = findViewById(R.id.addIdeaLiniar);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    void loadData() {
+        nume.setText(idea.get_nume());
+
+        createPage();
+
+        for (String tag : idea.getTags()) {
+            createNewChip(tag);
+        }
+    }
+
+    void setViews() {
+        chipGroup = (ChipGroup) findViewById(R.id.chip_groupEdit);
+        nume = (EditText) findViewById(R.id.nameEdit);
+        button = (Button) findViewById(R.id.buttonEdit);
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteEdit);
+
+        relativeLayout = findViewById(R.id.editIdeaLiniar);
     }
 
     void createNewChip(String text) {
@@ -166,13 +182,43 @@ public class AddIdea extends AppCompatActivity {
         parent.removeView(chip);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    void createPage() {
+        for (String text : idea.get_description()){
+            if (ID == 1000) {
+                int aux = nume.getId();
+                addTextView(aux, text);
+            } else {
+                if (text.startsWith("I/G")) {
+                    String aux = text.substring(4);
+                    Bitmap bitmap = StringToBitMap(aux);
+                    selectedImage = bitmap;
+                    addImageView(ID);
+                    continue;
+                }
+
+                addTextView(ID, text);
+            }
+        }
+    }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte= Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    void addTextView(int id) {
+    void addTextView(int id, String text) {
 
         EditText textView = new EditText(this);
 
-        if (id == R.id.nameViewscris) {
+        if (id == R.id.nameEdit) {
             textView.setId(ID);
             setTextViewParams(textView, id + 1);
         } else {
@@ -181,6 +227,7 @@ public class AddIdea extends AppCompatActivity {
         }
 
         textView.setHint("Edit idea description here ...");
+        if (text != "") textView.setText(text);
         textView.setTextSize(20);
 
         viewList.add(textView);
@@ -188,7 +235,7 @@ public class AddIdea extends AppCompatActivity {
         if (relativeLayout != null)
             relativeLayout.addView(textView);
 
-        if (id == R.id.nameViewscris)
+        if (id == R.id.nameEdit)
             addToolbarButton(++ID);
         else {
             addToolbarButton(id);
@@ -255,7 +302,7 @@ public class AddIdea extends AppCompatActivity {
                         if (newId + 1 < ID)
                             refreshID(newId + 1 , ToolType.TEXT);
                         else
-                            addTextView(newId + 1);
+                            addTextView(newId + 1,"");
 
                         popUp.dismiss();
                     }
@@ -315,8 +362,8 @@ public class AddIdea extends AppCompatActivity {
                     }
 
                 ID -= 2;
-               enableButtons();
-               refreshID(id, ToolType.NONE);
+                enableButtons();
+                refreshID(id, ToolType.NONE);
             }
         });
 
@@ -350,7 +397,7 @@ public class AddIdea extends AppCompatActivity {
         }
     }
 
-    void setTextViewParams(EditText textView, int id) {
+    void setTextViewParams(TextView textView, int id) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
@@ -381,7 +428,7 @@ public class AddIdea extends AppCompatActivity {
             if (id != 1001)
                 removeToolbarButton(id);
         }
-            else params.leftMargin = (int) (40f * this.getResources().getDisplayMetrics().density);
+        else params.leftMargin = (int) (40f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
 
         params.addRule(RelativeLayout.BELOW, id - 1);
@@ -419,13 +466,13 @@ public class AddIdea extends AppCompatActivity {
         removeActionButtons.clear();
 
         if (toolType == ToolType.TEXT)
-            addTextView(id);
+            addTextView(id, "");
         if (toolType == ToolType.IMAGE)
             addImageView(id);
 
         for (int i = 1; i < viewList.size(); i++)
             if (viewList.get(i) instanceof EditText)
-                setTextViewParams((EditText) viewList.get(i), viewList.get(i).getId());
+                setTextViewParams((TextView) viewList.get(i), viewList.get(i).getId());
             else  if (viewList.get(i) instanceof ImageView)
                 setImageViewParamas((ImageView) viewList.get(i), viewList.get(i).getId());
 

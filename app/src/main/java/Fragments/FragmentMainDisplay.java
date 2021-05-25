@@ -62,7 +62,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
         recycleView.addItemDecoration(spacingItemDecorator);
 
         Database.setActivity(this);
-        Database.displayAllIdeasSorted("_nume", "ASCENDING");
+        Database.displayAllIdeas();
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -109,8 +109,7 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
 
     void openLayoutActivity(Idea idea) {
         if (!isOpen) { isOpen = true;
-            FragmentPopUp.text1 = idea.get_nume();
-            FragmentPopUp.text2 = idea.get_description();
+            FragmentPopUp.idea = idea;
             PageLoader.ChangeCurrentItem(1);
         }
     }

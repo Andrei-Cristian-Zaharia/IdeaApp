@@ -12,20 +12,9 @@
         <View
             android:id="@+id/whitespot_1"
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-
-        <View
-            android:id="@+id/wave_1"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/whitespot_1"
-            android:background="@drawable/ic_wave__2"/>
-
-        <View
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/wave_1"
-            android:background="@color/backgroundColor"/>
+            android:background="@drawable/try2"/>
+
     </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -57,5 +46,11 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:layout_marginLeft="10dp"
+        android:background="@color/black"
+        android:backgroundTint="@color/white"
+        android:foreground="@drawable/add_icon"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:fabSize="normal"
         android:layout_marginBottom="10dp"/>
 </FrameLayout>

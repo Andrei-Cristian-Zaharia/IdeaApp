@@ -12,22 +12,25 @@
         <View
             android:id="@+id/whitespot_1"
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-
-        <View
-            android:id="@+id/wave_1"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/whitespot_1"
-            android:rotationY="180"
-            android:background="@drawable/ic_wave__2"/>
-
-        <View
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/wave_1"
-            android:background="@color/backgroundColor"/>
+            android:background="@color/white"/>
     </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contact_info"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="15dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/anonymous_user"
+            android:id="@+id/see_contact_info"/>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/name1"
@@ -38,26 +41,20 @@
         android:gravity="center"
         android:textSize="25sp"
         android:textStyle="bold"
-        tools:text="Name" />
+        tools:text="Name">
+    </TextView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="60dp">
 
-        <TextView
-            android:id="@+id/description1"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:autoSizeMaxTextSize="100dp"
-            android:autoSizeMinTextSize="20dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Description" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/relativeLayoutPopUp"/>
     </ScrollView>
 
     <FrameLayout

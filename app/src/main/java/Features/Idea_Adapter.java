@@ -24,7 +24,7 @@ import io.realm.OrderedRealmCollection;
 import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 
-enum Direction { DOWN, UP }
+enum Direction {DOWN, UP}
 
 public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.ViewHolder> implements Filterable {
 
@@ -34,7 +34,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     private final RecyclerView recyclerView;
     private final Context context;
 
-    public Idea_Adapter(Context c, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener, RecyclerView v){
+    public Idea_Adapter(Context c, OrderedRealmCollection<Idea> data, OnNoteListener _onNoteListener, RecyclerView v) {
         super(data, true, true);
 
         mOnNoteListener = _onNoteListener;
@@ -46,7 +46,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         IdeaClass holder = new IdeaClass(view, mOnNoteListener);
 
         return holder;
@@ -70,7 +70,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         if (direction == Direction.DOWN)
             holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_up));
         else
-             holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_down));
+            holder.itemView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.item_anim_down));
 
         IdeaClass mHolder = (IdeaClass) holder;
 
@@ -81,7 +81,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         text = text == null ? null : text.toLowerCase().trim();
         RealmQuery<Idea> query = Database.getRealm().where(Idea.class);
 
-        if(!(text == null || "".equals(text)))
+        if (!(text == null || "".equals(text)))
             query.contains("_nume", text, Case.INSENSITIVE);
 
         query.in("tags_string", new String[]{"Gifts"}, Case.INSENSITIVE);
@@ -94,7 +94,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         return new IdeaFilter(this);
     }
 
-    private static class IdeaFilter extends Filter{
+    private static class IdeaFilter extends Filter {
         private final Idea_Adapter adapter;
 
         private IdeaFilter(Idea_Adapter adapter) {
@@ -113,7 +113,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         }
     }
 
-    private static class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private static class IdeaClass extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final ChipGroup chipGroup;
         private final TextView nameText, likesText;
@@ -122,7 +122,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
 
         private final OnNoteListener onNoteListener;
 
-        public IdeaClass(View view, OnNoteListener _onNoteListener){
+        public IdeaClass(View view, OnNoteListener _onNoteListener) {
             super(view);
 
             v = view;
@@ -137,13 +137,30 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(Idea idea){
+        public void bind(Idea idea) {
             nameText.setText(idea.get_nume());
             likesText.setText("Likes: " + idea.get_likes().toString());
 
             chipGroup.removeAllViews();
-            for (String tag: idea.getTags()) {
-                createNewChip(tag);
+            if (idea.getTags().size() > 0) {
+                String tag_img = idea.getTags().get(0);
+
+                if (tag_img.equals("Health"))
+                    image.setBackgroundResource(R.drawable.health);
+                else if (tag_img.equals("Sport"))
+                    image.setBackgroundResource(R.drawable.sports);
+                else if (tag_img.equals("Food"))
+                    image.setBackgroundResource(R.drawable.food);
+                else if (tag_img.equals("Gifts"))
+                    image.setBackgroundResource(R.drawable.gifts);
+                else if (tag_img.equals("Mobile Application"))
+                    image.setBackgroundResource(R.drawable.mobile);
+                else if (tag_img.equals("Circuit"))
+                    image.setBackgroundResource(R.drawable.circuits);
+
+                for (String tag : idea.getTags()) {
+                    createNewChip(tag);
+                }
             }
         }
 
@@ -152,7 +169,7 @@ public class Idea_Adapter extends RealmRecyclerViewAdapter<Idea, RecyclerView.Vi
             onNoteListener.onNoteClick(getAdapterPosition());
         }
 
-        void createNewChip(String text){
+        void createNewChip(String text) {
             Chip mChip = (Chip) LayoutInflater.from(v.getContext()).inflate(R.layout.layout_chip_idea, this.chipGroup, false);
             mChip.setCheckable(false);
             mChip.setText(text);

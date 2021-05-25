@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SwitchCompat;
@@ -20,7 +21,9 @@ import com.example.ideaapp.R;
 
 import java.util.List;
 
+import Components.EditIdea;
 import Components.MainActivity;
+import Components.PageLoader;
 import Features.Database;
 import Features.Personal_Idea_Adapter;
 import Models.Idea;
@@ -31,11 +34,11 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
 
     private RecyclerView recyclerView;
 
-    private TextView name_text, likesNr, ideasNr, phoneNr, emailAddress;
+    private static TextView name_text, likesNr, ideasNr, phoneNr, emailAddress;
     private SwitchCompat switchCompat;
     private ViewGroup root;
 
-    private List<Idea> current_ideas;
+    private static List<Idea> current_ideas;
 
     private UserModel user;
 
@@ -65,11 +68,7 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         switchCompat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkSwitch();
-
-                Database.uiThreadRealm.executeTransaction(r ->{
-                    user.setShare_info(switchCompat.isChecked());
-                });
+                setSwitchCompat();
             }
         });
 
@@ -118,6 +117,14 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         return root;
     }
 
+    void setSwitchCompat(){
+        checkSwitch();
+
+        Database.uiThreadRealm.executeTransaction(r ->{
+            user.setShare_info(switchCompat.isChecked());
+        });
+    }
+
     void checkSwitch(){
         if (switchCompat.isChecked()){
             phoneNr.setFocusableInTouchMode(true);
@@ -133,7 +140,7 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         }
     }
 
-    int getNrOfLikes(){
+    private static int getNrOfLikes(){
         int likes = 0;
         for (Idea idea: current_ideas) likes += idea.get_likes();
 
@@ -151,21 +158,21 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         recyclerView = root.findViewById(R.id.recycleView_idea);
     }
 
-    private void setDataToDisplay(){
+    private static void setDataToDisplay(){
 
         name_text.setText(MainActivity.returnUser());
         likesNr.setText(String.valueOf(getNrOfLikes()));
         ideasNr.setText(String.valueOf(current_ideas.size()));
     }
 
-    void refreshData(){
+    public static void refreshData(){
         setDataToDisplay();
     }
 
     public void displayData() {
         current_ideas = Database.getIdeasOf(MainActivity.returnUser());
 
-        Personal_Idea_Adapter adapter = new Personal_Idea_Adapter((OrderedRealmCollection<Idea>) current_ideas, this);
+        Personal_Idea_Adapter adapter = new Personal_Idea_Adapter(FragmentAccount.this.getContext(), (OrderedRealmCollection<Idea>) current_ideas, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         SnapHelper snapHelper = new PagerSnapHelper();
 
@@ -185,5 +192,10 @@ public class FragmentAccount extends Fragment implements Personal_Idea_Adapter.O
         super.onResume();
 
         refreshData();
+    }
+
+    private void startActivity(Idea idea){
+        Intent intent = new Intent(FragmentAccount.this.getContext(), EditIdea.class);
+        startActivity(intent);
     }
 }

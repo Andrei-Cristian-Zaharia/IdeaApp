@@ -44,6 +44,47 @@
             android:ellipsize="end"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="55dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|right"
+                app:cardCornerRadius="10dp"
+                android:layout_marginRight="65dp">
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#2196F3"
+                android:foreground="@drawable/edit_icon"
+                android:id="@+id/edit_button"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right|bottom"
+                app:cardCornerRadius="10dp"
+                android:layout_marginRight="5dp">
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="#FF5722"
+                    android:foreground="@drawable/delete_icon"
+                    android:id="@+id/delete_button"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/idea_Switch"/>
+        </FrameLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
