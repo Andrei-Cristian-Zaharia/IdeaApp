@@ -44,7 +44,7 @@ import io.realm.RealmList;
 
 import static Components.MainActivity.returnUser;
 
-enum ToolType { TEXT, IMAGE}
+enum ToolType { NONE, TEXT, IMAGE}
 
 public class AddIdea extends AppCompatActivity {
 
@@ -60,6 +60,7 @@ public class AddIdea extends AppCompatActivity {
     private ChipGroup chipGroup;
 
     private RelativeLayout relativeLayout;
+    private Bitmap selectedImage;
 
     private Button button;
     private PopupWindow popUp;
@@ -68,6 +69,7 @@ public class AddIdea extends AppCompatActivity {
 
     private final ArrayList<View> viewList = new ArrayList<>();
     private final ArrayList<FloatingActionButton> floatingActionButtons = new ArrayList<>();
+    private final ArrayList<FloatingActionButton> removeActionButtons = new ArrayList<>();
     private int ID = 1000;
     private int imageID;
 
@@ -195,14 +197,14 @@ public class AddIdea extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    void addImageView(int id, Bitmap bitmap){
+    void addImageView(int id){
 
         ImageView image = new ImageView(this);
 
         image.setId(id);
         setImageViewParamas(image, id++);
 
-        Bitmap resize = Bitmap.createScaledBitmap(bitmap, 250, 250, true);
+        Bitmap resize = Bitmap.createScaledBitmap(selectedImage, 250, 250, true);
 
         image.setImageBitmap(resize);
 
@@ -222,7 +224,7 @@ public class AddIdea extends AppCompatActivity {
 
         floatingActionButton.setId(id);
 
-        setFloatActionButtonParams(floatingActionButton, id);
+        setFloatActionButtonParams(floatingActionButton, id, false);
         floatingActionButton.setForeground(getResources().getDrawable(R.drawable.add_icon));
 
         floatingActionButtons.add(floatingActionButton);
@@ -280,6 +282,47 @@ public class AddIdea extends AppCompatActivity {
         relativeLayout.addView(floatingActionButton);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    void removeToolbarButton(int id) {
+
+        FloatingActionButton floatingActionButton = new FloatingActionButton(this);
+
+        floatingActionButton.setId(id);
+
+        setFloatActionButtonParams(floatingActionButton, id, true);
+        floatingActionButton.setForeground(getResources().getDrawable(R.drawable.button_error_background));
+
+        removeActionButtons.add(floatingActionButton);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (View view1: viewList)
+                    if (view1.getId() == id - 1)
+                    {
+                        relativeLayout.removeView(view1);
+                        viewList.remove(view1);
+                        break;
+                    }
+
+                for (View view1: floatingActionButtons)
+                    if (view1.getId() == id)
+                    {
+                        relativeLayout.removeView(view1);
+                        floatingActionButtons.remove(view1);
+                        break;
+                    }
+
+                ID -= 2;
+               enableButtons();
+               refreshID(id, ToolType.NONE);
+            }
+        });
+
+        relativeLayout.addView(floatingActionButton);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
@@ -289,12 +332,13 @@ public class AddIdea extends AppCompatActivity {
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                if (imageID < ID)
+                if (imageID < ID) {
                     refreshID(imageID, ToolType.IMAGE);
+                }
                 else
-                    addImageView(imageID, selectedImage);
+                    addImageView(imageID);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -306,7 +350,7 @@ public class AddIdea extends AppCompatActivity {
         }
     }
 
-    void setTextViewParams(TextView textView, int id) {
+    void setTextViewParams(EditText textView, int id) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
@@ -325,13 +369,21 @@ public class AddIdea extends AppCompatActivity {
         imageView.setLayoutParams(params);
     }
 
-    void setFloatActionButtonParams(FloatingActionButton floatActionButton, int id) {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    void setFloatActionButtonParams(FloatingActionButton floatActionButton, int id, boolean left) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)
                 (20f * this.getResources().getDisplayMetrics().density),
                 (int) (20f * this.getResources().getDisplayMetrics().density));
 
-        params.leftMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
+        if (!left)
+        {
+            params.leftMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
+            if (id != 1001)
+                removeToolbarButton(id);
+        }
+            else params.leftMargin = (int) (40f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
+
         params.addRule(RelativeLayout.BELOW, id - 1);
         floatActionButton.setLayoutParams(params);
     }
@@ -339,11 +391,12 @@ public class AddIdea extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("ResourceType")
     void refreshID(int id, ToolType toolType) {
-
         for (int i = 0; i < viewList.size(); i++) {
             if (viewList.get(i).getId() >= id) {
                 int aux = viewList.get(i).getId();
-                aux +=2;
+
+                if (toolType != ToolType.NONE)
+                    aux +=2; else aux -= 2;
 
                 viewList.get(i).setId(aux);
             }
@@ -353,30 +406,31 @@ public class AddIdea extends AppCompatActivity {
             if (floatingActionButtons.get(i).getId() > id) {
 
                 int aux = floatingActionButtons.get(i).getId();
-                aux +=2;
+
+                if (toolType != ToolType.NONE)
+                    aux +=2; else aux -= 2;
 
                 floatingActionButtons.get(i).setId(aux);
             }
         }
 
+        for (View view1 : removeActionButtons)
+        { relativeLayout.removeView(view1); }
+        removeActionButtons.clear();
+
         if (toolType == ToolType.TEXT)
             addTextView(id);
-        else if (toolType == ToolType.IMAGE){
-            imageID = id;
-
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
-        }
+        if (toolType == ToolType.IMAGE)
+            addImageView(id);
 
         for (int i = 1; i < viewList.size(); i++)
             if (viewList.get(i) instanceof EditText)
-                setTextViewParams((TextView) viewList.get(i), viewList.get(i).getId());
+                setTextViewParams((EditText) viewList.get(i), viewList.get(i).getId());
             else  if (viewList.get(i) instanceof ImageView)
                 setImageViewParamas((ImageView) viewList.get(i), viewList.get(i).getId());
 
         for (int i = 1; i < floatingActionButtons.size(); i++)
-            setFloatActionButtonParams((FloatingActionButton) floatingActionButtons.get(i), floatingActionButtons.get(i).getId());
+            setFloatActionButtonParams((FloatingActionButton) floatingActionButtons.get(i), floatingActionButtons.get(i).getId(), false);
     }
 
     void disableButtons(){

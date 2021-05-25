@@ -41,7 +41,7 @@ public class FragmentPopUp extends Fragment {
 
     private FloatingActionButton addButton;
     private boolean isLiked;
-    private TextView textview1, textview2;
+    private TextView textview1;
     private TextView phoneText, emailText;
     private ViewGroup root;
     private CardView info_card;

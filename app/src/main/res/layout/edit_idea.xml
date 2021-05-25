@@ -25,14 +25,12 @@
             android:layout_below="@+id/nameEdit"
             android:layout_marginTop="9dp">
 
-            <EditText
-                android:id="@+id/descriptionEdit"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:hint="Edit idea description here ..."
-                android:textSize="20sp" />
+                android:orientation="vertical"
+                android:id="@+id/editIdeaLiniar">
+            </RelativeLayout>
         </ScrollView>
 
         <androidx.cardview.widget.CardView
