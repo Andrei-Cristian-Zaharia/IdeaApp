@@ -93,34 +93,6 @@ public class PageLoader extends AppCompatActivity {
         });
     }
 
-    static void changePage(int id){
-        Fragment fragment = null;
-
-        switch(id)
-        {
-            case R.id.home:
-                fragment = new FragmentMainDisplay();
-                break;
-            case R.id.profile:
-                fragment= new FragmentAccount();
-                break;
-            case R.id.ideea:
-                fragment = new FragmentPopUp();
-                break;
-
-        }
-
-        if(fragment !=null){
-            fragmentManager = activity.getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container,fragment)
-                    .commit();
-        }
-        else {
-            Log.e("TAG","Error in creating fragment");
-        }
-    }
-
 
 
     @Override
