@@ -110,7 +110,6 @@ public class FragmentMainDisplay extends Fragment implements Idea_Adapter.OnNote
     void openLayoutActivity(Idea idea) {
         if (!isOpen) { isOpen = true;
             FragmentPopUp.idea = idea;
-            PageLoader.ChangeCurrentItem(1);
         }
     }
 

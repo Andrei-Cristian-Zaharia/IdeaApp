@@ -1,25 +1,30 @@
 package Components;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ideaapp.R;
-import com.google.android.material.tabs.TabLayout;
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import Features.Database;
-import Features.FragmentAdapter;
 import Fragments.FragmentAccount;
+import Fragments.FragmentMainDisplay;
 import Fragments.FragmentPopUp;
 import Models.Idea;
 
@@ -27,59 +32,68 @@ enum Response {NONE, YES, NO}
 
 public class PageLoader extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private FragmentAdapter adapter;
+    ChipNavigationBar bottomNav;
+    static FragmentManager fragmentManager;
 
     private static Context mContext;
     static ViewPager2 viewPager2;
+    private static Activity activity;
 
     public static Response response = Response.NONE;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.slider_page);
-        mContext = this;
 
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager2 = findViewById(R.id.pager);
+        bottomNav = findViewById(R.id.bottom_navigation);
 
-        FragmentManager fm = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle());
-        viewPager2.setAdapter(adapter);
+        activity = this;
 
-        tabLayout.addTab(tabLayout.newTab().setText("Main display"));
-        tabLayout.addTab(tabLayout.newTab().setText("Idea"));
-        tabLayout.addTab(tabLayout.newTab().setText("Profile"));
+        if(savedInstanceState == null){
+            bottomNav.setItemSelected(R.id.home , true);
+            fragmentManager = getSupportFragmentManager();
+            FragmentMainDisplay homefragment = new FragmentMainDisplay();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container,homefragment)
+                    .commit();
+        }
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        bottomNav.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager2.setCurrentItem(tab.getPosition());
-            }
+            public void onItemSelected(int id) {
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+                Fragment fragment = null;
 
-            }
+                switch(id)
+                {
+                    case R.id.home:
+                        fragment = new FragmentMainDisplay();
+                        break;
+                    case R.id.profile:
+                        fragment= new FragmentAccount();
+                        break;
+                    case R.id.ideea:
+                        fragment = new FragmentPopUp();
+                        break;
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                }
 
-            }
-        });
+                if(fragment !=null){
+                    fragmentManager =getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container,fragment)
+                            .commit();
+                }
+                else {
+                    Log.e("TAG","Error in creating fragment");
+                }
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
     }
 
-    public static void ChangeCurrentItem(int position) {
-        viewPager2.setCurrentItem(position);
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -88,7 +102,7 @@ public class PageLoader extends AppCompatActivity {
             super.onBackPressed();
         } else {
             viewPager2.setCurrentItem(0);
-            tabLayout.selectTab(tabLayout.getTabAt(0));
+            //tabLayout.selectTab(tabLayout.getTabAt(0));
         }
     }
 
@@ -97,7 +111,7 @@ public class PageLoader extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogTheme);
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_succes_dialog, null);
-
+        //(ConstraintLayout) findViewById(R.id.LayoutDialogContainer
         builder.setView(view);
         ((Button) view.findViewById(R.id.buttonAction)).setText(mContext.getString(R.string.ok));
         ((ImageView) view.findViewById(R.id.imageIcon)).setImageResource(R.drawable.done);
@@ -168,7 +182,6 @@ public class PageLoader extends AppCompatActivity {
             public void onClick(View view) {
 
                 Database.deleteIdea(idea.get_nume());
-                FragmentPopUp.idea = null;
                 FragmentAccount.refreshData();
 
                 alertDialog.dismiss();
