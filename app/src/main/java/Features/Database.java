@@ -26,12 +26,13 @@ public class Database {
 
     static public Realm uiThreadRealm;
     static FragmentMainDisplay activity;
+    static String apiID = "ideaapp-mautk";
 
     public Database(Context context) {
 
         if (activity == null) {
             Realm.init(context);
-            App app = new App(new AppConfiguration.Builder("ideaapp-mautk").build());
+            App app = new App(new AppConfiguration.Builder(apiID).build());
 
             Credentials credentials = Credentials.anonymous();
             app.loginAsync(credentials, result -> {
@@ -46,7 +47,7 @@ public class Database {
                 }
             });
         }
-    }
+    } // Aceasta bucata de cod este folosita pentru a initializa baza de date
 
     public static void setActivity(FragmentMainDisplay _activity) {
         activity = _activity;
@@ -75,7 +76,7 @@ public class Database {
             idea.set_nume(idea_name);
             idea.set_description(description);
             idea.set_user_name(user);
-        });
+        });// Aceasta bucata de cod se ocupa de creearea unui model nou de idea
     }
 
     public static void InsertUser(String name) {
@@ -90,7 +91,7 @@ public class Database {
             userModel.setShare_info(false);
 
             r.insertOrUpdate(userModel);
-        });
+        }); // Aceasta bucata de cod se ocupa de creearea unui model nou de user
     }
 
     public static void deleteIdea(String name){
