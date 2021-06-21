@@ -23,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,7 +60,7 @@ public class AddIdea extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteTextView;
     private ChipGroup chipGroup;
 
-    private RelativeLayout relativeLayout;
+    private LinearLayout liniarLayout;
     private Bitmap selectedImage;
 
     private Button button;
@@ -71,7 +72,7 @@ public class AddIdea extends AppCompatActivity {
     private final ArrayList<FloatingActionButton> floatingActionButtons = new ArrayList<>();
     private final ArrayList<FloatingActionButton> removeActionButtons = new ArrayList<>();
     private int ID = 1000;
-    private int imageID;
+    private View imageView;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -86,7 +87,7 @@ public class AddIdea extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.dropdown_item, tags);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        addTextView(R.id.nameViewscris);
+        addTextView(null);
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,7 +120,7 @@ public class AddIdea extends AppCompatActivity {
                     finish();
                 }
             }
-        });
+        }); // Aceasta bucata de cod ajuta la introducerea unei idei in baza de date la apasarea butonului OK
     }
 
     public String BitMapToString(Bitmap bitmap){
@@ -136,7 +137,7 @@ public class AddIdea extends AppCompatActivity {
         button = (Button) findViewById(R.id.button);
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
 
-        relativeLayout = findViewById(R.id.addIdeaLiniar);
+        liniarLayout = findViewById(R.id.addIdeaLiniar);
     }
 
     void createNewChip(String text) {
@@ -166,70 +167,51 @@ public class AddIdea extends AppCompatActivity {
         parent.removeView(chip);
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    void addTextView(int id) {
-
+    void addTextView(View view) {
         EditText textView = new EditText(this);
 
-        if (id == R.id.nameViewscris) {
-            textView.setId(ID);
-            setTextViewParams(textView, id + 1);
-        } else {
-            textView.setId(id);
-            setTextViewParams(textView, id++);
-        }
-
+        setTextViewParams(textView);
         textView.setHint("Edit idea description here ...");
         textView.setTextSize(20);
 
         viewList.add(textView);
 
-        if (relativeLayout != null)
-            relativeLayout.addView(textView);
+        if (liniarLayout != null)
+            if (view == null)
+                liniarLayout.addView(textView);
+            else
+                liniarLayout.addView(textView, liniarLayout.indexOfChild(view) + 2);
 
-        if (id == R.id.nameViewscris)
-            addToolbarButton(++ID);
-        else {
-            addToolbarButton(id);
-            ID++;
-        }
+        addToolbarButton(textView, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    void addImageView(int id){
-
+    void addImageView(View view){
         ImageView image = new ImageView(this);
 
-        image.setId(id);
-        setImageViewParamas(image, id++);
+        setImageViewParamas(image);
 
         Bitmap resize = Bitmap.createScaledBitmap(selectedImage, 250, 250, true);
-
         image.setImageBitmap(resize);
 
         viewList.add(image);
 
-        relativeLayout.addView(image);
+        if (view == null)
+            liniarLayout.addView(image);
+        else
+            liniarLayout.addView(image, liniarLayout.indexOfChild(view) + 2);
 
-        addToolbarButton(id);
-        ID++;
+        addToolbarButton(image, false);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    void addToolbarButton(int id) {
+    void addToolbarButton(View view, boolean addOne) {
 
         FloatingActionButton floatingActionButton = new FloatingActionButton(this);
 
-        floatingActionButton.setId(id);
-
-        setFloatActionButtonParams(floatingActionButton, id, false);
+        setFloatActionButtonParams(floatingActionButton);
         floatingActionButton.setForeground(getResources().getDrawable(R.drawable.add_icon));
 
         floatingActionButtons.add(floatingActionButton);
-
-        ID++;
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +224,7 @@ public class AddIdea extends AppCompatActivity {
                 popUp.setTouchable(true);
                 popUp.setFocusable(true);
                 popUp.setOutsideTouchable(true);
-                popUp.showAtLocation(relativeLayout, Gravity.NO_GRAVITY, location[0], location[1]);
+                popUp.showAtLocation(liniarLayout, Gravity.NO_GRAVITY, location[0], location[1]);
 
                 Button buttonText = (Button) popUp.getContentView().findViewById(R.id.addTextView);
                 Button buttonImage = (Button) popUp.getContentView().findViewById(R.id.addImageView);
@@ -251,11 +233,11 @@ public class AddIdea extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        int newId = floatingActionButton.getId();
-                        if (newId + 1 < ID)
-                            refreshID(newId + 1 , ToolType.TEXT);
-                        else
-                            addTextView(newId + 1);
+                        if (addOne) {
+                            addTextView(null);
+                            floatingActionButtons.remove(floatingActionButton);
+                            liniarLayout.removeView(floatingActionButton);
+                        } else addTextView(floatingActionButton);
 
                         popUp.dismiss();
                     }
@@ -264,12 +246,23 @@ public class AddIdea extends AppCompatActivity {
                 buttonImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int newId = floatingActionButton.getId();
-                        imageID = newId + 1;
 
-                        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                        photoPickerIntent.setType("image/*");
-                        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+                        if (addOne) {
+                            imageView = null;
+
+                            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                            photoPickerIntent.setType("image/*");
+                            startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+
+                            floatingActionButtons.remove(floatingActionButton);
+                            liniarLayout.removeView(floatingActionButton);
+                        } else {
+                            imageView = floatingActionButton;
+
+                            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                            photoPickerIntent.setType("image/*");
+                            startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+                        }
 
                         popUp.dismiss();
                     }
@@ -279,18 +272,19 @@ public class AddIdea extends AppCompatActivity {
 
         if (floatingActionButtons.size() == 7) disableButtons();
 
-        relativeLayout.addView(floatingActionButton);
+        if (addOne) liniarLayout.addView(floatingActionButton);
+            else {
+            liniarLayout.addView(floatingActionButton, liniarLayout.indexOfChild(view) + 1);
+            removeToolbarButton(floatingActionButton);
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    void removeToolbarButton(int id) {
+    void removeToolbarButton(View view) {
 
         FloatingActionButton floatingActionButton = new FloatingActionButton(this);
 
-        floatingActionButton.setId(id);
-
-        setFloatActionButtonParams(floatingActionButton, id, true);
+        setFloatActionButtonParams(floatingActionButton);
         floatingActionButton.setForeground(getResources().getDrawable(R.drawable.button_error_background));
 
         removeActionButtons.add(floatingActionButton);
@@ -298,32 +292,27 @@ public class AddIdea extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (View view1: viewList)
-                    if (view1.getId() == id - 1)
-                    {
-                        relativeLayout.removeView(view1);
-                        viewList.remove(view1);
-                        break;
-                    }
 
-                for (View view1: floatingActionButtons)
-                    if (view1.getId() == id)
-                    {
-                        relativeLayout.removeView(view1);
-                        floatingActionButtons.remove(view1);
-                        break;
-                    }
+                int index = liniarLayout.indexOfChild(floatingActionButton);
 
-                ID -= 2;
+                removeActionButtons.remove(liniarLayout.getChildAt(index));
+                liniarLayout.removeViewAt(index);
+
+                floatingActionButtons.remove(liniarLayout.getChildAt(index - 1));
+                liniarLayout.removeViewAt(index - 1);
+
+                viewList.remove(liniarLayout.getChildAt(index - 2));
+                liniarLayout.removeViewAt(index - 2);
+
+                if (floatingActionButtons.size() == 0) {addToolbarButton(null, true); imageView = null; }
+
                enableButtons();
-               refreshID(id, ToolType.NONE);
             }
         });
 
-        relativeLayout.addView(floatingActionButton);
+        liniarLayout.addView(floatingActionButton, liniarLayout.indexOfChild(view) + 1);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -334,103 +323,42 @@ public class AddIdea extends AppCompatActivity {
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                if (imageID < ID) {
-                    refreshID(imageID, ToolType.IMAGE);
-                }
-                else
-                    addImageView(imageID);
+                addImageView(imageView);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
-
-        }else {
+        }else
             Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
-        }
     }
 
-    void setTextViewParams(EditText textView, int id) {
+    void setTextViewParams(EditText textView) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
-        params.addRule(RelativeLayout.BELOW, id - 1);
         textView.setLayoutParams(params);
     }
 
-    void setImageViewParamas(ImageView imageView, int id){
+    void setImageViewParamas(ImageView imageView){
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        params.addRule(RelativeLayout.BELOW, id - 1);
+        params.addRule(LinearLayout.TEXT_ALIGNMENT_CENTER);
         imageView.setLayoutParams(params);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    void setFloatActionButtonParams(FloatingActionButton floatActionButton, int id, boolean left) {
+    void setFloatActionButtonParams(FloatingActionButton floatActionButton) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)
                 (20f * this.getResources().getDisplayMetrics().density),
                 (int) (20f * this.getResources().getDisplayMetrics().density));
 
-        if (!left)
-        {
-            params.leftMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
-            if (id != 1001)
-                removeToolbarButton(id);
-        }
-            else params.leftMargin = (int) (40f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
 
-        params.addRule(RelativeLayout.BELOW, id - 1);
         floatActionButton.setLayoutParams(params);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @SuppressLint("ResourceType")
-    void refreshID(int id, ToolType toolType) {
-        for (int i = 0; i < viewList.size(); i++) {
-            if (viewList.get(i).getId() >= id) {
-                int aux = viewList.get(i).getId();
-
-                if (toolType != ToolType.NONE)
-                    aux +=2; else aux -= 2;
-
-                viewList.get(i).setId(aux);
-            }
-        }
-
-        for (int i = 0; i < floatingActionButtons.size(); i++) {
-            if (floatingActionButtons.get(i).getId() > id) {
-
-                int aux = floatingActionButtons.get(i).getId();
-
-                if (toolType != ToolType.NONE)
-                    aux +=2; else aux -= 2;
-
-                floatingActionButtons.get(i).setId(aux);
-            }
-        }
-
-        for (View view1 : removeActionButtons)
-        { relativeLayout.removeView(view1); }
-        removeActionButtons.clear();
-
-        if (toolType == ToolType.TEXT)
-            addTextView(id);
-        if (toolType == ToolType.IMAGE)
-            addImageView(id);
-
-        for (int i = 1; i < viewList.size(); i++)
-            if (viewList.get(i) instanceof EditText)
-                setTextViewParams((EditText) viewList.get(i), viewList.get(i).getId());
-            else  if (viewList.get(i) instanceof ImageView)
-                setImageViewParamas((ImageView) viewList.get(i), viewList.get(i).getId());
-
-        for (int i = 1; i < floatingActionButtons.size(); i++)
-            setFloatActionButtonParams((FloatingActionButton) floatingActionButtons.get(i), floatingActionButtons.get(i).getId(), false);
     }
 
     void disableButtons(){

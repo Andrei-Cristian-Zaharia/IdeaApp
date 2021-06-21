@@ -48,6 +48,7 @@ public class PageLoader extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_navigation);
 
+        mContext = this;
         activity = this;
 
         if(savedInstanceState == null){
