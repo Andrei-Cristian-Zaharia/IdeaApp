@@ -229,9 +229,9 @@ public class EditIdea extends AppCompatActivity {
             if (view == null)
                 liniarLayout.addView(textView);
             else
-                liniarLayout.addView(textView, liniarLayout.indexOfChild(view) + 2);
+                liniarLayout.addView(textView, liniarLayout.indexOfChild(view) + 1);
 
-        addToolbarButton(textView, false);
+        createNewButtons(textView, false);
     }
 
     void addImageView(View view){
@@ -247,17 +247,27 @@ public class EditIdea extends AppCompatActivity {
         if (view == null)
             liniarLayout.addView(image);
         else
-            liniarLayout.addView(image, liniarLayout.indexOfChild(view) + 2);
+            liniarLayout.addView(image, liniarLayout.indexOfChild(view) + 1);
 
-        addToolbarButton(image, false);
+        createNewButtons(image, false);
+    }
+
+    void createNewButtons(View view, boolean addOne){
+
+        LinearLayout layout = new LinearLayout(this);
+        setLiniarLayout(layout);
+
+        liniarLayout.addView(layout, liniarLayout.indexOfChild(view) + 1);
+
+        addToolbarButton(layout, addOne);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    void addToolbarButton(View view, boolean addOne) {
+    void addToolbarButton(LinearLayout layout, boolean addOne) {
 
         FloatingActionButton floatingActionButton = new FloatingActionButton(this);
 
-        setFloatActionButtonParams(floatingActionButton);
+        setFloatActionButtonParams(floatingActionButton, false);
         floatingActionButton.setForeground(getResources().getDrawable(R.drawable.add_icon));
 
         floatingActionButtons.add(floatingActionButton);
@@ -284,9 +294,9 @@ public class EditIdea extends AppCompatActivity {
 
                         if (addOne) {
                             addTextView(null, "");
-                            floatingActionButtons.remove(floatingActionButton);
-                            liniarLayout.removeView(floatingActionButton);
-                        } else addTextView(floatingActionButton, "");
+                            floatingActionButtons.remove(layout.getChildAt(0));
+                            liniarLayout.removeView(layout);
+                        } else addTextView(layout, "");
 
                         popUp.dismiss();
                     }
@@ -303,10 +313,10 @@ public class EditIdea extends AppCompatActivity {
                             photoPickerIntent.setType("image/*");
                             startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
 
-                            floatingActionButtons.remove(floatingActionButton);
-                            liniarLayout.removeView(floatingActionButton);
+                            floatingActionButtons.remove(layout.getChildAt(0));
+                            liniarLayout.removeView(layout);
                         } else {
-                            imageView = lastView;
+                            imageView = layout;
 
                             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                             photoPickerIntent.setType("image/*");
@@ -321,46 +331,37 @@ public class EditIdea extends AppCompatActivity {
 
         if (floatingActionButtons.size() == 7) disableButtons();
 
-        if (addOne) liniarLayout.addView(floatingActionButton);
-        else {
-            liniarLayout.addView(floatingActionButton, liniarLayout.indexOfChild(view) + 1);
-            removeToolbarButton(floatingActionButton);
-        }
-
-        lastView = floatingActionButton;
+        layout.addView(floatingActionButton);
+        if (!addOne) removeToolbarButton(layout);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    void removeToolbarButton(View view) {
+    void removeToolbarButton(LinearLayout layout) {
 
         FloatingActionButton floatingActionButton = new FloatingActionButton(this);
 
-        setFloatActionButtonParams(floatingActionButton);
+        setFloatActionButtonParams(floatingActionButton, true);
         floatingActionButton.setForeground(getResources().getDrawable(R.drawable.button_error_background));
-
-        removeActionButtons.add(floatingActionButton);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int index = liniarLayout.indexOfChild(floatingActionButton);
+                int index = liniarLayout.indexOfChild(layout);
 
-                removeActionButtons.remove(liniarLayout.getChildAt(index));
-                liniarLayout.removeViewAt(index);
+                floatingActionButtons.remove(layout.getChildAt(0));
+                liniarLayout.removeView(layout);
 
-                floatingActionButtons.remove(liniarLayout.getChildAt(index - 1));
+                viewList.remove(liniarLayout.getChildAt(index - 1));
                 liniarLayout.removeViewAt(index - 1);
 
-                viewList.remove(liniarLayout.getChildAt(index - 2));
-                liniarLayout.removeViewAt(index - 2);
+                if (floatingActionButtons.size() == 0) { createNewButtons(null, true); imageView = null; }
 
-                if (floatingActionButtons.size() == 0) {addToolbarButton(null, true); imageView = null; }
                 enableButtons();
             }
         });
 
-        liniarLayout.addView(floatingActionButton, liniarLayout.indexOfChild(view) + 1);
+        layout.addView(floatingActionButton);
     }
 
     @Override
@@ -384,7 +385,7 @@ public class EditIdea extends AppCompatActivity {
     }
 
     void setTextViewParams(EditText textView) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
@@ -392,23 +393,34 @@ public class EditIdea extends AppCompatActivity {
     }
 
     void setImageViewParamas(ImageView imageView){
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1000, 1000);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(1000, 1000);
         params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
-        params.addRule(LinearLayout.TEXT_ALIGNMENT_CENTER);
+        params.gravity = Gravity.CENTER;;
         imageView.setLayoutParams(params);
     }
 
-    void setFloatActionButtonParams(FloatingActionButton floatActionButton) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)
-                (20f * this.getResources().getDisplayMetrics().density),
-                (int) (20f * this.getResources().getDisplayMetrics().density));
+    void setFloatActionButtonParams(FloatingActionButton floatActionButton, boolean right) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)
+                (240f * this.getResources().getDisplayMetrics().density),
+                (int) (24f * this.getResources().getDisplayMetrics().density));
 
-        params.leftMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (15f * this.getResources().getDisplayMetrics().density);
         params.topMargin = (int) (5f * this.getResources().getDisplayMetrics().density);
 
+        if (right) params.leftMargin = (int) (290f * this.getResources().getDisplayMetrics().density);
         floatActionButton.setLayoutParams(params);
+    }
+
+    void setLiniarLayout(LinearLayout liniarLayout){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.rightMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.leftMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.topMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        params.bottomMargin = (int) (10f * this.getResources().getDisplayMetrics().density);
+        liniarLayout.setOrientation(LinearLayout.HORIZONTAL);
+        liniarLayout.setLayoutParams(params);
     }
 
     void disableButtons(){
