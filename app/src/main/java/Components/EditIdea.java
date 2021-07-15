@@ -46,12 +46,12 @@ import io.realm.RealmList;
 import static Components.MainActivity.returnUser;
 
 public class EditIdea extends AppCompatActivity {
-    private EditText nume, descriere;
+    private EditText nume;
     private String nume1;
     private String[] tags;
     private final int RESULT_LOAD_IMG = 123;
 
-    private RealmList<String> descriere1 = new RealmList<>();
+    private final RealmList<String> descriere1 = new RealmList<>();
 
     private final List<String> ideaTags = new ArrayList<String>();
     private AutoCompleteTextView autoCompleteTextView;
@@ -70,11 +70,9 @@ public class EditIdea extends AppCompatActivity {
 
     private final ArrayList<View> viewList = new ArrayList<>();
     private final ArrayList<FloatingActionButton> floatingActionButtons = new ArrayList<>();
-    private final ArrayList<FloatingActionButton> removeActionButtons = new ArrayList<>();
     private View lastView;
     private View imageView;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,7 +256,7 @@ public class EditIdea extends AppCompatActivity {
         setLiniarLayout(layout);
 
         liniarLayout.addView(layout, liniarLayout.indexOfChild(view) + 1);
-
+        lastView = layout;
         addToolbarButton(layout, addOne);
     }
 

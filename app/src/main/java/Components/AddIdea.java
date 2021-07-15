@@ -45,8 +45,6 @@ import io.realm.RealmList;
 
 import static Components.MainActivity.returnUser;
 
-enum ToolType { NONE, TEXT, IMAGE}
-
 public class AddIdea extends AppCompatActivity {
 
     private EditText nume;
@@ -72,7 +70,6 @@ public class AddIdea extends AppCompatActivity {
     private final ArrayList<FloatingActionButton> floatingActionButtons = new ArrayList<>();
     private View imageView;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +115,7 @@ public class AddIdea extends AppCompatActivity {
                     finish();
                 }
             }
-        }); // Aceasta bucata de cod ajuta la introducerea unei idei in baza de date la apasarea butonului OK
+        });
     }
 
     public String BitMapToString(Bitmap bitmap){
